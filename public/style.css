@@ -1,0 +1,80 @@
+body {
+    margin: 0.8em;
+}
+.banner.actions {
+    text-align: right;
+    margin-bottom: 1em;
+}
+body {
+    margin: 0.8em;
+}
+.timeline-title {
+    text-align: center;
+}
+.banner.actions {
+    text-align: right;
+    margin-bottom: 1em;
+}
+.dots {
+    text-align: left;
+    padding: 1em;
+    margin: 1em;
+    font-size: larger;
+    border: 1px solid #bbb;
+}
+.dot {
+    display: inline-block;
+    padding: 1em;
+    margin: 1em;
+    border: 1px solid lightblue;
+    border-radius: 10px;
+    width: 250px;
+    max-width: 250px;
+}
+.widedot {
+    padding: 1em;
+    margin: 1em;
+    border: 1px solid lightblue;
+    border-radius: 10px;
+}
+.content, .start, .end {
+    margin: 1em;
+}
+.editable {
+    margin: 1em;
+    padding: 0.5em;
+}
+#new-button {
+    float: right;
+    margin-right: 30%;
+}
+.ctrl {
+    padding: 0.5em;
+    border: 1px dotted #ccc;
+}
+.specify-time-group {
+    text-align: right;
+    font-weight: normal;
+    font-size: smaller;
+}
+
+.vis-item .vis-item-overflow {
+  overflow: visible;
+}
+.closer {
+    float: right;
+    margin: 0.5em;
+    cursor: pointer;
+}
+.warning {
+    color: red;
+}
+.widget-pair {
+    margin-top: 0.4em;
+}
+.widget-pair label, .widget-pair input {
+    display: block;
+}
+.user-frame {
+    float: right;
+}
