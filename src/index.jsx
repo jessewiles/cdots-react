@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { render } from 'react-dom'
 import {Router, Route, IndexRoute, hashHistory} from 'react-router'
-import Main from './main.jsx'
-import Home from './home.jsx'
-import View from './view.jsx'
-import Edit from './edit.jsx'
+import Main from './routes/main.jsx'
+import Home from './routes/home.jsx'
+import View from './routes/view.jsx'
+import Edit from './routes/edit.jsx'
 
 render(
     <Router history={hashHistory}>

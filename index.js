@@ -12,7 +12,8 @@ const TIMELINES = [
             {
                 id: 'x1000',
                 content: 'eins',
-                start: '2015-04-11'
+                start: '2015-04-11',
+                end: '2015-05-01'
             },
             {
                 id: 'x2000',
