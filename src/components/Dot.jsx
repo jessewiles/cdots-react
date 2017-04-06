@@ -27,11 +27,11 @@ class Dot extends Component {
     }
 
     handleStartChange(e) {
-        this.setState({ start: e.target.value });
+        this.setState({ start: e });
     }
 
     handleEndChange(e) {
-        this.setState({ end: e.target.value });
+        this.setState({ end: e });
     }
 
     render() {
@@ -49,13 +49,13 @@ class Dot extends Component {
                         onChange={this.handleCaptionChange} />
                     <div>Start</div>
                     <Datetime
-                        value={dot.start}
+                        defaultValue={dot.start}
                         dateFormat="YYYY-MM-DD"
                         timeFormat={false}
                         onChange={this.handleStartChange} />
                     <div>End</div>
                     <Datetime
-                        value={dot.end}
+                        defaultValue={dot.end}
                         dateFormat="YYYY-MM-DD"
                         timeFormat={false}
                         onChange={this.handleEndChange} />
