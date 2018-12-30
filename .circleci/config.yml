@@ -13,6 +13,14 @@ jobs:
 
       - run:
           command:
+            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+
+      - run:
+          command:
+              dep ensure
+
+      - run:
+          command:
             make test
 
 workflows:
