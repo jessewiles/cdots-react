@@ -15,7 +15,7 @@ jobs:
 
       - run:
           command:
-            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sudo sh
 
       - run:
           command:
