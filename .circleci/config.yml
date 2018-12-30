@@ -15,7 +15,7 @@ jobs:
 
       - run:
           command:
-            mkdir /home/circleci/repo/vendor/bin
+            mkdir /home/circleci/repo/bin
 
       - run:
           command:
