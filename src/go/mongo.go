@@ -40,8 +40,8 @@ type MongoDB struct {
 }
 
 func (m *MongoDB) SetDefault() {
-	m.Host = "mongodb"
-	m.Addrs = "mongodb:27017"
+	m.Host = "localhost"
+	m.Addrs = "localhost:27017"
 	m.Database = "cdots"
 	m.EventTTLAfterEnd = 1 * time.Second
 	m.StdEventTTL = 20 * time.Minute
