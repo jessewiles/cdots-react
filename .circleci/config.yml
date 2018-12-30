@@ -5,7 +5,7 @@ jobs:
     docker:
         - image: circleci/golang:1.11-node
     environment:
-        - GOPATH: /home/circleci/repo/vendor:/home/circleci/repo/src/go:/usr/local/go
+        - GOPATH: /usr/local/go:/home/circleci/repo/vendor:/home/circleci/repo/src/go
     steps:
       - checkout
 
