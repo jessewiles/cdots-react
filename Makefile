@@ -1,13 +1,20 @@
 all: build
 
 build: clean
-	go build -o bin/server ./src/**/*.go
+	@npm rum build
+	@go build -o bin/server ./src/**/*.go
 
 clean:
+	@mkdir -p bin
 	@rm -r ./bin/ > /dev/null 2>&1
 
-test:
+test-js:
+	@npm test
+
+test-go:
 	TMPL_DIR=`pwd `/src/go/templates/* go test -v src/go/*.go
+
+test: test-js test-go
 
 docker-build:
 	@rm ./bin/linserver > /dev/null 2>&1

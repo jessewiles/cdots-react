@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { render } from 'react-dom'
 
-import Timeline from '../components/Timeline.jsx'
+import Timeline from '../components/Timeline.js'
 
 class View extends Component {
     render() {

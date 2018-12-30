@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { render } from 'react-dom'
 
-import {TimelineList} from '../components/Timeline.jsx'
-import Home from './home.jsx'
+import { TimelineList } from '../components/Timeline.js'
+import Home from './home.js'
 
 class Main extends Component {
     render() {

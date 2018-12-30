@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import Datetime from 'react-datetime'
-import Timeline from '../components/Timeline.jsx'
+import Timeline from '../components/Timeline.js'
 import moment from 'moment'
-import Dot from '../components/Dot.jsx'
+import Dot from '../components/Dot.js'
 
 
 class Edit extends Component {
