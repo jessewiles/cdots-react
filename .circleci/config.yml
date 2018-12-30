@@ -14,8 +14,12 @@ jobs:
             npm install
 
       - run:
-          command:
-            mkdir /home/circleci/repo/bin
+          command: |
+            mkdir /home/circleci/repo/vendor/src
+            cd /home/circleci/repo/vendor/src
+            ln -s ../github.com github.com
+            ln -s ../golang.org golang.org
+            ln -s ../gopkg.in gopkg.in
 
       - run:
           command:
