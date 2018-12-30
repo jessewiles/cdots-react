@@ -15,8 +15,8 @@ jobs:
 
       - run:
           command:
-            mkdir /home/circleci/repo/vendor/bin
-            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+            - mkdir /home/circleci/repo/vendor/bin
+            - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 
       - run:
           command:
