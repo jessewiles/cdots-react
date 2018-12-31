@@ -12,7 +12,7 @@ test-js:
 	@npm test
 
 test-go:
-	TMPL_DIR=`pwd `/src/go/templates/* go test -v src/go/*.go
+	go test -v src/go/*.go
 
 test: test-js test-go
 

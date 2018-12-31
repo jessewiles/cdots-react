@@ -1,9 +1,7 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
-	"os"
 	"strconv"
 
 	//"github.com/gin-contrib/sessions"
@@ -101,11 +99,11 @@ func SetupRouter() *gin.Engine {
 	mongo.SetDefault()
 
 	router := gin.Default()
-	router.LoadHTMLGlob(fmt.Sprintf("%s/*", os.Getenv("TMPL_DIR")))
+	router.LoadHTMLGlob(Config.TemplateDirectory)
 	router.Use(gin.Recovery())
 	router.Use(MiddleDB(&mongo))
 
-	router.Static("/static/", fmt.Sprintf("%s", os.Getenv("STATIC_DIR")))
+	router.Static("/static/", Config.StaticDirectory)
 	router.GET("/", siteIndexHandler)
 	router.GET("/data", getData)
 	router.POST("/data", postData)
