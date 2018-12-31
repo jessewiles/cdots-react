@@ -3,7 +3,6 @@ package main
 import (
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"strings"
 	"testing"
 
@@ -16,7 +15,7 @@ func TestIndexHandler(t *testing.T) {
 	req, _ := http.NewRequest("GET", "/", nil)
 	w := httptest.NewRecorder()
 	r := gin.Default()
-	r.LoadHTMLGlob(os.Getenv("TMPL_DIR"))
+	r.LoadHTMLGlob(Config.TemplateDirectory)
 	r.GET("/", siteIndexHandler)
 	r.ServeHTTP(w, req)
 	if w.HeaderMap.Get("Content-Type") != "text/html; charset=utf-8" {

@@ -1,6 +1,8 @@
-bundle.js
-bundle.js.map
+app.js
+app.js.map
 node_modules
 debug.log
 
 bin/
+
+

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"time"
 
@@ -40,8 +41,8 @@ type MongoDB struct {
 }
 
 func (m *MongoDB) SetDefault() {
-	m.Host = "localhost"
-	m.Addrs = "localhost:27017"
+	m.Host = Config.MongoHost
+	m.Addrs = fmt.Sprintf("%s:%s", Config.MongoHost, Config.MongoPort)
 	m.Database = "cdots"
 	m.EventTTLAfterEnd = 1 * time.Second
 	m.StdEventTTL = 20 * time.Minute
