@@ -1,10 +1,10 @@
-import chai from 'chai';
-import chaiEnzyme from 'chai-enzyme';
-import { configure } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-15';
+import chai from 'chai'
+import chaiEnzyme from 'chai-enzyme'
+import { configure } from 'enzyme'
+import Adapter from 'enzyme-adapter-react-15'
 
-chai.use(chaiEnzyme());
+chai.use(chaiEnzyme())
 
-configure({ adapter: new Adapter() });
+configure({ adapter: new Adapter() })
 
-export const expect = chai.expect;
+export const expect = chai.expect

@@ -16,7 +16,7 @@ class Edit extends Component {
     componentDidMount() {
         window.fetch('/view/' + this.props.params.name).then(res => {
             res.json().then(data => {
-                this.setState({dots: data.dots});
+                this.setState({dots: data.dots})
             })
         })
     }
@@ -26,7 +26,7 @@ class Edit extends Component {
             viewer = '#/view/' + name,
             saver = '#/save/' + name,
             deleter = '#/delete/' + name,
-            adder = '#/add/' + name;
+            adder = '#/add/' + name
         return (
             <div>
                 <div className="banner actions">
@@ -46,11 +46,11 @@ class Edit extends Component {
                     {this.state.dots.map((dot) => {
                         return (
                             <Dot dot={dot} key={dot.id} />
-                        );
+                        )
                     })}
                 </div>
             </div>
-        );
+        )
     }
 }
 

@@ -4,7 +4,7 @@ import { TimelineList } from '../components/Timeline.js'
 
 class Home extends Component {
     render() {
-        return ( <TimelineList /> );
+        return ( <TimelineList /> )
     }
 }
 

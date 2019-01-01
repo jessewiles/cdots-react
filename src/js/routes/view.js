@@ -6,7 +6,7 @@ import Timeline from '../components/Timeline.js'
 class View extends Component {
     render() {
         const name = this.props.params.name,
-              url  = '#/edit/' + name;
+              url  = '#/edit/' + name
         return (
             <div>
                 <div className="banner actions">
@@ -16,7 +16,7 @@ class View extends Component {
                 </div>
                 <Timeline name={name}/>
             </div>
-        );
+        )
     }
 }
 
