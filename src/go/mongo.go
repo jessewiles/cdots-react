@@ -110,3 +110,12 @@ func (m *MongoDB) GetTimeline(name string) (tl Timeline, err error) {
 	err = session.DB(m.Database).C("timelines").Find(bson.M{"name": name}).One(&tl)
 	return tl, err
 }
+
+func (m *MongoDB) SaveTimeline(name string, tl *Timeline) (err error) {
+	session := m.Session.Clone()
+	defer session.Close()
+
+	err = session.DB(m.Database).C("timelines").Update(
+		bson.M{"name": name}, tl)
+	return
+}

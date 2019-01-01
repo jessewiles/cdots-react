@@ -1,23 +1,23 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import { Link } from 'react-router';
+import React, { Component } from 'react'
+import ReactDOM from 'react-dom'
+import { Link } from 'react-router'
 
-const vis = require('vis');
+const vis = require('vis')
 
 class Timeline extends Component {
     componentDidMount() {
-        var name = this.props.name;
+        var name = this.props.name
         window.fetch('/view/'+ name).then(res => {
             res.json().then(data => {
                 var t = ReactDOM.findDOMNode(this),
                     v = new vis.Timeline(
                     t, new vis.DataSet(data.dots), {}
-                );
+                )
             })
         })
     }
     render() {
-        return ( <div className="timeline"></div> );
+        return ( <div className="timeline"></div> )
     }
 }
 
@@ -32,7 +32,7 @@ export class TimelineList extends Component {
     componentDidMount() {
         window.fetch('/timelines').then(res => {
             res.json().then(data => {
-                this.setState({timelines: data});
+                this.setState({timelines: data})
             })
         })
     }
@@ -48,10 +48,10 @@ export class TimelineList extends Component {
                                 {tline.name}
                             </Link>
                         </li>
-                    );
+                    )
                 })}
             </ul>
-        );
+        )
     }
 }
 

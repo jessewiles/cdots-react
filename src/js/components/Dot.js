@@ -12,15 +12,15 @@ class Dot extends Component {
             start: this.props.dot.start,
             end: this.props.dot.end
         }
-        this.handleCaptionChange = this.handleCaptionChange.bind(this);
-        this.handleStartChange = this.handleStartChange.bind(this);
-        this.handleEndChange = this.handleEndChange.bind(this);
+        this.handleCaptionChange = this.handleCaptionChange.bind(this)
+        this.handleStartChange = this.handleStartChange.bind(this)
+        this.handleEndChange = this.handleEndChange.bind(this)
     }
 
     handleCloseDot(e) {
         e.target.parentNode.parentNode.removeChild(
             e.target.parentNode
-        );
+        )
     }
 
     handleCaptionChange(e) {
@@ -28,16 +28,15 @@ class Dot extends Component {
     }
 
     handleStartChange(e) {
-        this.setState({ start: e });
+        this.setState({ start: e })
     }
 
     handleEndChange(e) {
-        this.setState({ end: e });
+        this.setState({ end: e })
     }
 
     render() {
         let dot = this.state
-        console.log(this.state)
 
         return (
             <div id={'did' + dot.id} className="dot">
@@ -63,7 +62,7 @@ class Dot extends Component {
                         onChange={this.handleEndChange} />
                 </FormGroup>
             </div>
-        );
+        )
     }
 }
 

@@ -1,6 +1,9 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
 	"net/http"
 	"strconv"
 
@@ -86,12 +89,45 @@ func getTimeline(c *gin.Context) { // {{{
 
 	name := c.Param("name")
 	tl, err := mongo.GetTimeline(name)
-	// fmt.Printf("\ndata: %v, ok: %v\n", data, ok)
 	if err != nil {
 		c.JSON(400, gin.H{"message": "can't get timeline from database", "body": nil})
 	} else {
 		c.JSON(200, tl)
 	}
+}
+
+func saveTimeline(c *gin.Context) {
+	mongo, ok := c.Keys["mongo"].(*MongoDB)
+	if !ok {
+		c.JSON(400, gin.H{"message": "Database is not available", "body": nil})
+	}
+
+	name := c.Param("name")
+	body, err := ioutil.ReadAll(c.Request.Body)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"message": fmt.Sprintf("Error reading data from request: %v", err),
+			"body":    nil,
+		})
+	}
+	tl := Timeline{}
+	err = json.Unmarshal(body, &tl)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"message": fmt.Sprintf("Error unmarshaling timeline from request %v", err),
+			"body":    nil,
+		})
+		return
+	}
+	err = mongo.SaveTimeline(name, &tl)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"message": fmt.Sprintf("Error saving timeline: %v", err),
+			"body":    nil,
+		})
+		return
+	}
+	c.JSON(200, nil)
 }
 
 func SetupRouter() *gin.Engine {
@@ -109,6 +145,7 @@ func SetupRouter() *gin.Engine {
 	router.POST("/data", postData)
 	router.GET("/timelines", getTimelines)
 	router.GET("/view/:name", getTimeline)
+	router.GET("/save/:name", saveTimeline)
 	return router
 }
 
