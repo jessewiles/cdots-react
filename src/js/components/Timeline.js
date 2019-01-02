@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 
 const vis = require('vis')
 
 class Timeline extends Component {
     componentDidMount() {
         var name = this.props.name
-        window.fetch('/view/'+ name).then(res => {
+        window.fetch('/api/view/'+ name).then(res => {
             res.json().then(data => {
                 var t = ReactDOM.findDOMNode(this),
                     v = new vis.Timeline(
@@ -30,7 +30,7 @@ export class TimelineList extends Component {
         }
     }
     componentDidMount() {
-        window.fetch('/timelines').then(res => {
+        window.fetch('/api/timelines').then(res => {
             res.json().then(data => {
                 this.setState({timelines: data})
             })
