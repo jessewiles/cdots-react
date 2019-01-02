@@ -4,7 +4,7 @@
   "description": "port existing cdots progress to react",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --require babel-core/register --require jsdom-global/register src/js/**/*.spec.js",
+    "test": "mocha --require @babel/register --require jsdom-global/register src/js/**/*.spec.js",
     "watch": "webpack -d --watch",
     "build": "webpack --mode development",
     "serve": "../../bin/server"
@@ -15,6 +15,7 @@
     "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.2.3",
     "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.0.0",
     "babel-loader": "^8.0.4",
     "chai": "^4.2.0",
     "chai-enzyme": "^1.0.0-beta.1",
