@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { render } from 'react-dom'
-import { Router, Route, IndexRoute, hashHistory } from 'react-router'
+import { HashRouter, Switch, Route } from 'react-router-dom'
 import Main from './routes/main.js'
 import Home from './routes/home.js'
 import View from './routes/view.js'
@@ -8,13 +8,13 @@ import Edit from './routes/edit.js'
 import Save from './routes/save.js'
 
 render(
-    <Router history={hashHistory}>
-        <Route path="/" component={Main}>
-          <IndexRoute component={Home} />
+    <HashRouter>
+        <Main>
+          <Route exact path="/" component={Home} />
           <Route path="/view/:name" component={View} />
           <Route path="/edit/:name" component={Edit} />
           <Route path="/save/:name" component={Save} />
-        </Route>
-    </Router>,
+        </Main>
+    </HashRouter>,
     document.getElementById('container')
 );

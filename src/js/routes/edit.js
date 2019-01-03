@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
+import { Link, Redirect } from 'react-router-dom'
 import Datetime from 'react-datetime'
-import Timeline from '../components/Timeline.js'
 import moment from 'moment'
+
+import Timeline from '../components/Timeline.js'
 import Dot from '../components/Dot.js'
+import Save from './save.js'
 
 
 class Edit extends Component {
@@ -12,41 +15,62 @@ class Edit extends Component {
         this.state = {
             dots: []
         }
+        this.doSave = this.doSave.bind(this)
+        this.updateState = this.updateState.bind(this)
     }
+
     componentDidMount() {
-        window.fetch('/view/' + this.props.params.name).then(res => {
+        window.fetch('/api/view/' + this.props.match.params.name).then(res => {
             res.json().then(data => {
                 this.setState({dots: data.dots})
             })
         })
     }
+
+    doSave(e) {
+        let link = "/view/" +this.props.match.params.name
+        window.fetch(
+            '/api/save/' + this.props.match.params.name, {
+                method: 'post',
+                body: JSON.stringify({
+                    name: this.props.match.params.name,
+                    dots: this.state.dots})
+            }).then(res => {
+            res.json().then(data => { })
+        })
+    }
+
+    updateState(state) {
+        for (var i = 0; i < this.state.dots.length; i++) {
+            let dot = this.state.dots[i]
+            if (state.id === dot.id) {
+                this.state.dots[i] = state
+                break
+            }
+        }
+    }
+
     render() {
-        var name = this.props.params.name,
-            homer = '#/',
-            viewer = '#/view/' + name,
-            saver = '#/save/' + name,
-            deleter = '#/delete/' + name,
-            adder = '#/add/' + name
+        let name = this.props.match.params.name
         return (
             <div>
                 <div className="banner actions">
-                    <a href={homer}>Home</a>
+                    <Link to="/">Home</Link>
                     <span> | </span>
-                    <a href={viewer}>View</a>
+                    <Link to={`/view/${name}`}>View</Link>
                     <span> | </span>
-                    <a href={saver}>Save</a>
+                    <Link to={`/view/${name}`} onClick={this.doSave}>Save</Link>
                     <span> | </span>
-                    <a href={deleter}>Delete</a>
+                    <Link to={`/delete/${name}`}>Delete</Link>
                 </div>
-                <Timeline name={this.props.params.name}/>
+                <Timeline name={name}/>
                 <div className="dots">
                     <div id="dotid-add">
-                        <div><b><a href={adder}>Add a dot</a></b></div>
+                        <div><b><Link to={`/add/${name}`}>Add a dot</Link></b></div>
                     </div>
                     {this.state.dots.map((dot) => {
                         return (
-                            <Dot dot={dot} key={dot.id} />
-                        )
+                            <Dot dot={dot} key={dot.id} updateState={this.updateState} />)
                     })}
                 </div>
             </div>

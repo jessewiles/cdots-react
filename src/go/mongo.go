@@ -16,10 +16,10 @@ type Data struct {
 }
 
 type Timeline struct {
-	ID   string `json:"id"`
-	User string `json:"user"`
-	Name string `json:"name"`
-	Dots []Dot  `json:"dots"`
+	ID   string `json:"id,omitempty"`
+	User string `json:"user,omitempty"`
+	Name string `json:"name,omitempty"`
+	Dots []Dot  `json:"dots,omitempty"`
 }
 
 type Dot struct {
@@ -115,7 +115,26 @@ func (m *MongoDB) SaveTimeline(name string, tl *Timeline) (err error) {
 	session := m.Session.Clone()
 	defer session.Close()
 
+	dots := []bson.M{}
+	for _, dot := range tl.Dots {
+		d := bson.M{
+			"id":      dot.ID,
+			"content": dot.Content,
+			"start":   dot.Start,
+		}
+		if dot.End != nil {
+			d["end"] = dot.End
+		}
+		dots = append(dots, d)
+	}
 	err = session.DB(m.Database).C("timelines").Update(
-		bson.M{"name": name}, tl)
+		bson.M{"name": name},
+		bson.M{
+			"$set": bson.M{
+				"name": tl.Name,
+				"dots": dots,
+			},
+		},
+	)
 	return
 }

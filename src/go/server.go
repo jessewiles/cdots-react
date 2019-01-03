@@ -114,7 +114,7 @@ func saveTimeline(c *gin.Context) {
 	err = json.Unmarshal(body, &tl)
 	if err != nil {
 		c.JSON(400, gin.H{
-			"message": fmt.Sprintf("Error unmarshaling timeline from request %v", err),
+			"message": fmt.Sprintf("Error unmarshaling timeline from request: %v: %s", err, string(body)),
 			"body":    nil,
 		})
 		return
@@ -143,9 +143,9 @@ func SetupRouter() *gin.Engine {
 	router.GET("/", siteIndexHandler)
 	router.GET("/data", getData)
 	router.POST("/data", postData)
-	router.GET("/timelines", getTimelines)
-	router.GET("/view/:name", getTimeline)
-	router.GET("/save/:name", saveTimeline)
+	router.GET("/api/timelines", getTimelines)
+	router.GET("/api/view/:name", getTimeline)
+	router.POST("/api/save/:name", saveTimeline)
 	return router
 }
 
