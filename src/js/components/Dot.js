@@ -13,8 +13,9 @@ class Dot extends Component {
             end: this.props.dot.end
         }
         this.handleCaptionChange = this.handleCaptionChange.bind(this)
-        this.handleStartChange = this.handleStartChange.bind(this)
+        this.handleCloseDot = this.handleCloseDot.bind(this)
         this.handleEndChange = this.handleEndChange.bind(this)
+        this.handleStartChange = this.handleStartChange.bind(this)
     }
 
     componentDidUpdate() {
@@ -22,9 +23,7 @@ class Dot extends Component {
     }
 
     handleCloseDot(e) {
-        e.target.parentNode.parentNode.removeChild(
-            e.target.parentNode
-        )
+        this.props.removeDot(this.props.dot.id)
     }
 
     handleCaptionChange(e) {

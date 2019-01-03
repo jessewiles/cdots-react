@@ -16,6 +16,7 @@ class Edit extends Component {
             dots: []
         }
         this.doSave = this.doSave.bind(this)
+        this.removeDot = this.removeDot.bind(this)
         this.updateState = this.updateState.bind(this)
     }
 
@@ -50,6 +51,17 @@ class Edit extends Component {
         }
     }
 
+    removeDot(dotid) {
+        let newDots = []
+        for (var i = 0; i < this.state.dots.length; i++) {
+            let dot = this.state.dots[i]
+            if (dotid !== dot.id) {
+                newDots.push(Object.assign({}, dot))
+            }
+        }
+        this.setState({dots: newDots})
+    }
+
     render() {
         let name = this.props.match.params.name
         return (
@@ -70,7 +82,7 @@ class Edit extends Component {
                     </div>
                     {this.state.dots.map((dot) => {
                         return (
-                            <Dot dot={dot} key={dot.id} updateState={this.updateState} />)
+                            <Dot dot={dot} key={dot.id} updateState={this.updateState} removeDot={this.removeDot} />)
                     })}
                 </div>
             </div>
