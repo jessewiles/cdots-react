@@ -21,7 +21,7 @@ class Edit extends Component {
     }
 
     componentDidMount() {
-        window.fetch('/api/view/' + this.props.match.params.name).then(res => {
+        fetch('/api/view/' + this.props.match.params.name).then(res => {
             res.json().then(data => {
                 this.setState({dots: data.dots})
             })
@@ -30,15 +30,13 @@ class Edit extends Component {
 
     doSave(e) {
         let link = "/view/" +this.props.match.params.name
-        window.fetch(
+        fetch(
             '/api/save/' + this.props.match.params.name, {
                 method: 'post',
                 body: JSON.stringify({
                     name: this.props.match.params.name,
                     dots: this.state.dots})
-            }).then(res => {
-            res.json().then(data => { })
-        })
+            })
     }
 
     updateState(state) {
