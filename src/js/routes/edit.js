@@ -16,11 +16,12 @@ class Edit extends Component {
             dots: []
         }
         this.doSave = this.doSave.bind(this)
+        this.removeDot = this.removeDot.bind(this)
         this.updateState = this.updateState.bind(this)
     }
 
     componentDidMount() {
-        window.fetch('/api/view/' + this.props.match.params.name).then(res => {
+        fetch('/api/view/' + this.props.match.params.name).then(res => {
             res.json().then(data => {
                 this.setState({dots: data.dots})
             })
@@ -29,15 +30,13 @@ class Edit extends Component {
 
     doSave(e) {
         let link = "/view/" +this.props.match.params.name
-        window.fetch(
+        fetch(
             '/api/save/' + this.props.match.params.name, {
                 method: 'post',
                 body: JSON.stringify({
                     name: this.props.match.params.name,
                     dots: this.state.dots})
-            }).then(res => {
-            res.json().then(data => { })
-        })
+            })
     }
 
     updateState(state) {
@@ -48,6 +47,17 @@ class Edit extends Component {
                 break
             }
         }
+    }
+
+    removeDot(dotid) {
+        let newDots = []
+        for (var i = 0; i < this.state.dots.length; i++) {
+            let dot = this.state.dots[i]
+            if (dotid !== dot.id) {
+                newDots.push(Object.assign({}, dot))
+            }
+        }
+        this.setState({dots: newDots})
     }
 
     render() {
@@ -70,7 +80,7 @@ class Edit extends Component {
                     </div>
                     {this.state.dots.map((dot) => {
                         return (
-                            <Dot dot={dot} key={dot.id} updateState={this.updateState} />)
+                            <Dot dot={dot} key={dot.id} updateState={this.updateState} removeDot={this.removeDot} />)
                     })}
                 </div>
             </div>
