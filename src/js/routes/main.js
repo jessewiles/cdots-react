@@ -6,7 +6,7 @@ import Home from './home.js'
 
 class Main extends Component {
     render() {
-        const title = 'CDots: Linear Time Modeling'
+        const title = 'cdots; timeline applications'
         document.title = title
         return (
           <div>

@@ -16,6 +16,7 @@ class Timeline extends Component {
             })
         })
     }
+
     render() {
         return ( <div className="timeline"></div> )
     }
@@ -29,13 +30,16 @@ export class TimelineList extends Component {
             timelines: []
         }
     }
+
     componentDidMount() {
         window.fetch('/api/timelines').then(res => {
-            res.json().then(data => {
+            res.json().then(async data => {
+                data.sort((a, b) => (a.name < b.name) ? -1 : 1)
                 this.setState({timelines: data})
             })
         })
     }
+
     render() {
         return (
             <ul>
