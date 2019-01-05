@@ -1,10 +1,9 @@
 import React from 'react'
-import { mount, shallow } from 'enzyme'
+import { mount } from 'enzyme'
 import { MemoryRouter, Route } from 'react-router-dom'
 import '../util/setup.js'
 
 import Edit from './edit.js'
-//jest.mock('react-router-dom')
 
 let timeline = {
     name: 'test-timeline',
@@ -30,11 +29,11 @@ describe('edit route', () => {
             return jest.fn().mockImplementation(() =>
                 Promise.resolve({
                     ok: true,
-                    json: () => Promise.resolve(timeline)
+                    json: () => Promise.resolve(data)
                 })
             )
         }
-        global.fetch = mockFetch(JSON.stringify(timeline))
+        global.fetch = mockFetch(timeline)
         const wrapper = mount(
             <MemoryRouter initialIndex={0} initialEntries={['/edit/test-timeline']}>
                 <Route path="/edit/:name" component={Edit} />
