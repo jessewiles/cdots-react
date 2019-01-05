@@ -62,6 +62,5 @@ describe('<TimlineList />', () => {
         global.fetch = mockFetch(timelines)
         wrapper = shallow(<TimelineList />)
         expect(global.fetch).toHaveBeenCalledTimes(1)
-        // TODO: Look for a way to test async calls
     })
 })

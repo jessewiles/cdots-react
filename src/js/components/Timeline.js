@@ -33,7 +33,7 @@ export class TimelineList extends Component {
 
     componentDidMount() {
         window.fetch('/api/timelines').then(res => {
-            res.json().then(async data => {
+            res.json().then(data => {
                 data.sort((a, b) => (a.name < b.name) ? -1 : 1)
                 this.setState({timelines: data})
             })
