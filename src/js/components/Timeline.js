@@ -7,7 +7,7 @@ const vis = require('vis')
 class Timeline extends Component {
     componentDidMount() {
         var name = this.props.name
-        window.fetch('/api/view/'+ name).then(res => {
+        window.fetch('/api/timeline/'+ name).then(res => {
             res.json().then(data => {
                 var t = ReactDOM.findDOMNode(this),
                     v = new vis.Timeline(
@@ -34,8 +34,10 @@ export class TimelineList extends Component {
     componentDidMount() {
         window.fetch('/api/timelines').then(res => {
             res.json().then(data => {
-                data.sort((a, b) => (a.name < b.name) ? -1 : 1)
-                this.setState({timelines: data})
+                if (data !== null) {
+                    data.sort((a, b) => (a.name < b.name) ? -1 : 1)
+                    this.setState({timelines: data})
+                }
             })
         })
     }

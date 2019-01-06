@@ -138,3 +138,11 @@ func (m *MongoDB) SaveTimeline(name string, tl *Timeline) (err error) {
 	)
 	return
 }
+
+func (m *MongoDB) DeleteTimeline(name string) (err error) {
+	session := m.Session.Clone()
+	defer session.Close()
+
+	err = session.DB(m.Database).C("timelines").Remove(bson.M{"name": name})
+	return
+}

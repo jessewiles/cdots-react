@@ -32,40 +32,6 @@ func uuidHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(auuid)
 }
 
-func getData(c *gin.Context) { // {{{
-	mongo, ok := c.Keys["mongo"].(*MongoDB)
-	if !ok {
-		c.JSON(400, gin.H{"message": "can't reach db", "body": nil})
-	}
-
-	data, err := mongo.GetData()
-	// fmt.Printf("\ndata: %v, ok: %v\n", data, ok)
-	if err != nil {
-		c.JSON(400, gin.H{"message": "can't get data from database", "body": nil})
-	} else {
-		c.JSON(200, gin.H{"message": "get data sucess", "body": data})
-	}
-} // }}}
-
-func postData(c *gin.Context) { // {{{
-	mongo, ok := c.Keys["mongo"].(*MongoDB)
-	if !ok {
-		c.JSON(400, gin.H{"message": "can't connect to db", "body": nil})
-	}
-	var req Data
-	err := c.Bind(&req)
-	if err != nil {
-		c.JSON(400, gin.H{"message": "Incorrect data", "body": nil})
-		return
-	} else {
-		err := mongo.PostData(&req)
-		if err != nil {
-			c.JSON(400, gin.H{"message": "error post to db", "body": nil})
-		}
-		c.JSON(200, gin.H{"message": "post data sucess", "body": req})
-	}
-} // }}}
-
 func getTimelines(c *gin.Context) { // {{{
 	mongo, ok := c.Keys["mongo"].(*MongoDB)
 	if !ok {
@@ -130,6 +96,26 @@ func saveTimeline(c *gin.Context) {
 	c.JSON(200, nil)
 }
 
+// deleteTimeline
+func deleteTimeline(c *gin.Context) {
+	mongo, ok := c.Keys["mongo"].(*MongoDB)
+	if !ok {
+		c.JSON(400, gin.H{"message": "Database is not available", "body": nil})
+	}
+
+	name := c.Param("name")
+
+	err := mongo.DeleteTimeline(name)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"message": fmt.Sprintf("Error deleting timeline: %v", err),
+			"body":    nil,
+		})
+		return
+	}
+	c.JSON(200, nil)
+}
+
 func SetupRouter() *gin.Engine {
 	mongo := MongoDB{}
 	mongo.SetDefault()
@@ -141,11 +127,10 @@ func SetupRouter() *gin.Engine {
 
 	router.Static("/static/", Config.StaticDirectory)
 	router.GET("/", siteIndexHandler)
-	router.GET("/data", getData)
-	router.POST("/data", postData)
 	router.GET("/api/timelines", getTimelines)
-	router.GET("/api/view/:name", getTimeline)
-	router.POST("/api/save/:name", saveTimeline)
+	router.GET("/api/timeline/:name", getTimeline)
+	router.POST("/api/timeline/:name", saveTimeline)
+	router.DELETE("/api/timeline/:name", deleteTimeline)
 	return router
 }
 
