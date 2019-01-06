@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
+import { Modal, Button } from 'react-bootstrap'
+import { render } from 'react-dom'
 import { Link, Redirect } from 'react-router-dom'
-import Datetime from 'react-datetime'
 import moment from 'moment'
 
 import Timeline from '../components/Timeline.js'
 import Dot from '../components/Dot.js'
-import Save from './save.js'
 
 
 class Edit extends Component {
@@ -13,15 +13,19 @@ class Edit extends Component {
         super(props)
 
         this.state = {
-            dots: []
+            dots: [],
+            showConfirmDeleteModal: false
         }
+        this.confirmDelete = this.confirmDelete.bind(this)
+        this.doDelete = this.doDelete.bind(this)
         this.doSave = this.doSave.bind(this)
+        this.cancelDelete = this.cancelDelete.bind(this)
         this.removeDot = this.removeDot.bind(this)
         this.updateState = this.updateState.bind(this)
     }
 
     componentDidMount() {
-        fetch('/api/view/' + this.props.match.params.name).then(res => {
+        fetch('/api/timeline/' + this.props.match.params.name).then(res => {
             res.json().then(data => {
                 this.setState({dots: data.dots})
             })
@@ -31,12 +35,28 @@ class Edit extends Component {
     doSave(e) {
         let link = "/view/" +this.props.match.params.name
         fetch(
-            '/api/save/' + this.props.match.params.name, {
+            '/api/timeline/' + this.props.match.params.name, {
                 method: 'post',
                 body: JSON.stringify({
                     name: this.props.match.params.name,
                     dots: this.state.dots})
             })
+    }
+
+    doDelete(e) {
+        fetch('/api/timeline/' + this.props.match.params.name, {
+            method: 'delete'
+        }).then(() => {
+            document.location = '/#/'
+        })
+    }
+
+    confirmDelete(e) {
+        this.setState({showConfirmDeleteModal: true})
+    }
+
+    cancelDelete(e) {
+        this.setState({showConfirmDeleteModal: false})
     }
 
     updateState(state) {
@@ -61,7 +81,28 @@ class Edit extends Component {
     }
 
     render() {
-        let name = this.props.match.params.name
+        let name = this.props.match.params.name,
+            dialog = null
+
+        if (this.state.showConfirmDeleteModal) {
+            dialog =  (
+                <div className="static-modal">
+                    <Modal.Dialog>
+                        <Modal.Header >
+                            <Modal.Title bsStyle="warning">Confirm timeline delete</Modal.Title>
+                        </Modal.Header>
+
+                        <Modal.Body>Are you sure you want to delete this timeline?</Modal.Body>
+
+                        <Modal.Footer>
+                            <Button onClick={this.cancelDelete}>Cancel</Button>
+                            <Button bsStyle="warning" onClick={this.doDelete}>Confirm</Button>
+                        </Modal.Footer>
+                    </Modal.Dialog>
+                </div>
+            )
+        }
+
         return (
             <div>
                 <div className="banner actions">
@@ -71,7 +112,7 @@ class Edit extends Component {
                     <span> | </span>
                     <Link to={`/view/${name}`} onClick={this.doSave}>Save</Link>
                     <span> | </span>
-                    <Link to={`/delete/${name}`}>Delete</Link>
+                    <Button bsStyle="link" onClick={this.confirmDelete}> Delete </Button>
                 </div>
                 <Timeline name={name}/>
                 <div className="dots">
@@ -83,6 +124,7 @@ class Edit extends Component {
                             <Dot dot={dot} key={dot.id} updateState={this.updateState} removeDot={this.removeDot} />)
                     })}
                 </div>
+                {dialog}
             </div>
         )
     }

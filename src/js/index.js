@@ -5,7 +5,6 @@ import Main from './routes/main.js'
 import Home from './routes/home.js'
 import View from './routes/view.js'
 import Edit from './routes/edit.js'
-import Save from './routes/save.js'
 
 render(
     <HashRouter>
@@ -13,7 +12,6 @@ render(
           <Route exact path="/" component={Home} />
           <Route path="/view/:name" component={View} />
           <Route path="/edit/:name" component={Edit} />
-          <Route path="/save/:name" component={Save} />
         </Main>
     </HashRouter>,
     document.getElementById('container')
