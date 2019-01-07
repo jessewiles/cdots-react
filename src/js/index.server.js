@@ -1,3 +1,4 @@
+/* eslint-env node */
 const express = require('express')
 const path = require('path')
 const port = process.env.PORT || 4000
@@ -49,10 +50,10 @@ const TIMELINES = [
             }
         ]
     }
-    ]
+]
 
 
-app.use(express.static(__dirname + '/public'))
+app.use(express.static(path.resolve(__dirname, '/public')))
 
 app.get('/', function(request, response) {
     response.sendFile(path.resolve(__dirname, 'public', 'index.html'))
@@ -64,13 +65,14 @@ app.get('/timelines', function(request, response) {
 })
 
 app.get('/view/:name', function(request, response) {
-    var name = request.params.name,
-        obj = (t => {
-            for (var i = 0 ; i < t.length; i++) {
-                if (t[i].name === name)
-                    return t[i];
+    let name = request.params.name
+    let obj = (t => {
+        for (var i = 0; i < t.length; i++) {
+            if (t[i].name === name) {
+                return t[i]
             }
-        })(TIMELINES);
+        }
+    })(TIMELINES)
     response.writeHead(200, 'OK', { 'Content-Type': 'application/json' })
     response.end(JSON.stringify(obj))
 })

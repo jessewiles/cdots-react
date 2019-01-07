@@ -10,7 +10,7 @@ let adot = {
     start: new Date("2015-01-02")
 }
 
-describe('<Dot />', function () {
+describe('<Dot />', function() {
     it('should have content', () => {
         const wrapper = mount(<Dot dot={adot} />)
         expect(wrapper.find('input').first().prop('value')).toBe('this is content')

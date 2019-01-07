@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Datetime from 'react-datetime'
-import moment from 'moment'
-import {FormGroup, ControlLabel, FormControl, Checkbox} from 'react-bootstrap'
+import { FormGroup, ControlLabel, FormControl } from 'react-bootstrap'
 
 class Dot extends Component {
     constructor(props) {
@@ -28,7 +27,6 @@ class Dot extends Component {
 
     handleCaptionChange(e) {
         this.setState({ content: e.target.value })
-
     }
 
     handleStartChange(e) {
@@ -37,7 +35,7 @@ class Dot extends Component {
 
     handleEndChange(e) {
         if (e === "") {
-            this.setState({end: null})
+            this.setState({ end: null })
         } else {
             this.setState({ end: e })
         }

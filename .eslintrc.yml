@@ -1,0 +1,24 @@
+extends:
+    - react
+
+rules:
+  react/prop-types: 0
+  semi:
+    - error
+    - never
+    - beforeStatementContinuationChars:
+        always
+  space-before-function-paren: 
+    - error
+    - anonymous: never
+      named: never
+      asyncArrow: always
+
+env:
+  browser: true
+  es6: true
+  jest: true
+
+settings:
+  react:
+    version: detect

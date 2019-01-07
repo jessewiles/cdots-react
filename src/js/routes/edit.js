@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Modal, Button } from 'react-bootstrap'
-import { render } from 'react-dom'
-import { Link, Redirect } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import moment from 'moment'
 
 import Timeline from '../components/Timeline.js'
@@ -28,25 +27,24 @@ class Edit extends Component {
     componentDidMount() {
         fetch('/api/timeline/' + this.props.match.params.name).then(res => {
             res.json().then(data => {
-                this.setState({dots: data.dots})
+                this.setState({ dots: data.dots })
             })
         })
     }
 
     addDot(e) {
         let dots = this.state.dots.slice()
-        dots.push({id: 'd'+ Math.random().toString().substring(3), content: '<New Dot>', start: moment().format()})
-        this.setState({dots: dots})
+        dots.push({ id: 'd' + Math.random().toString().substring(3), content: '<New Dot>', start: moment().format() })
+        this.setState({ dots: dots })
     }
 
     doSave(e) {
-        let link = "/view/" +this.props.match.params.name
         fetch(
             '/api/timeline/' + this.props.match.params.name, {
                 method: 'post',
                 body: JSON.stringify({
                     name: this.props.match.params.name,
-                    dots: this.state.dots})
+                    dots: this.state.dots })
             })
     }
 
@@ -59,21 +57,23 @@ class Edit extends Component {
     }
 
     confirmDelete(e) {
-        this.setState({showConfirmDeleteModal: true})
+        this.setState({ showConfirmDeleteModal: true })
     }
 
     cancelDelete(e) {
-        this.setState({showConfirmDeleteModal: false})
+        this.setState({ showConfirmDeleteModal: false })
     }
 
     updateState(state) {
-        for (var i = 0; i < this.state.dots.length; i++) {
-            let dot = this.state.dots[i]
+        let dots = this.state.dots.slice()
+        for (var i = 0; i < dots.length; i++) {
+            let dot = dots[i]
             if (state.id === dot.id) {
-                this.state.dots[i] = state
+                dots[i] = state
                 break
             }
         }
+        this.setState({ dots: dots })
     }
 
     removeDot(dotid) {
@@ -84,15 +84,15 @@ class Edit extends Component {
                 newDots.push(Object.assign({}, dot))
             }
         }
-        this.setState({dots: newDots})
+        this.setState({ dots: newDots })
     }
 
     render() {
-        let name = this.props.match.params.name,
-            dialog = null
+        let name = this.props.match.params.name
+        let dialog = null
 
         if (this.state.showConfirmDeleteModal) {
-            dialog =  (
+            dialog = (
                 <div className="static-modal">
                     <Modal.Dialog>
                         <Modal.Header >

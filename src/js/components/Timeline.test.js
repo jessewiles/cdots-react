@@ -1,6 +1,5 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import { MemoryRouter } from 'react-router-dom'
 import '../util/setup.js'
 
 import { TimelineList } from './Timeline.js'
@@ -42,8 +41,8 @@ let timelines = [{
 
 describe('<TimlineList />', () => {
     test('Sorts list by name', () => {
-        let wrapper,
-            mockFetch = (data) => {
+        let wrapper
+        let mockFetch = (data) => {
             return jest.fn().mockImplementation(() =>
                 Promise.resolve({
                     ok: true,
@@ -59,8 +58,8 @@ describe('<TimlineList />', () => {
                 })
             )
         }
-        global.fetch = mockFetch(timelines)
-        wrapper = shallow(<TimelineList />)
-        expect(global.fetch).toHaveBeenCalledTimes(1)
+        global.fetch = mockFetch(timelines) // eslint-disable-line no-undef
+        shallow(<TimelineList />)
+        expect(global.fetch).toHaveBeenCalledTimes(1) // eslint-disable-line no-undef
     })
 })

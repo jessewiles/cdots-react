@@ -7,18 +7,16 @@ const vis = require('vis')
 class Timeline extends Component {
     componentDidMount() {
         var name = this.props.name
-        window.fetch('/api/timeline/'+ name).then(res => {
+        window.fetch('/api/timeline/' + name).then(res => {
             res.json().then(data => {
-                var t = ReactDOM.findDOMNode(this),
-                    v = new vis.Timeline(
-                    t, new vis.DataSet(data.dots), {}
-                )
+                let t = ReactDOM.findDOMNode(this)
+                let v = new vis.Timeline(t, new vis.DataSet(data.dots), {}) // eslint-disable-line no-unused-vars
             })
         })
     }
 
     render() {
-        return ( <div className="timeline"></div> )
+        return (<div className="timeline" />)
     }
 }
 
@@ -36,7 +34,7 @@ export class TimelineList extends Component {
             res.json().then(data => {
                 if (data !== null) {
                     data.sort((a, b) => (a.name < b.name) ? -1 : 1)
-                    this.setState({timelines: data})
+                    this.setState({ timelines: data })
                 }
             })
         })
