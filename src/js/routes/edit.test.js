@@ -33,12 +33,12 @@ describe('edit route', () => {
                 })
             )
         }
-        global.fetch = mockFetch(timeline)
-        const wrapper = mount(
+        global.fetch = mockFetch(timeline) // eslint-disable-line no-undef
+        const wrapper = mount( // eslint-disable-line no-unused-vars
             <MemoryRouter initialIndex={0} initialEntries={['/edit/test-timeline']}>
                 <Route path="/edit/:name" component={Edit} />
             </MemoryRouter>
         )
-        expect(global.fetch).toHaveBeenCalledTimes(2);
+        expect(global.fetch).toHaveBeenCalledTimes(2) // eslint-disable-line no-undef
     })
 })

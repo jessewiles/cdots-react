@@ -1,7 +1,7 @@
 {
-  "name": "cdots-react",
+  "name": "cdots",
   "version": "1.0.0",
-  "description": "port existing cdots progress to react",
+  "description": "web application for making timelines",
   "main": "index.js",
   "scripts": {
     "test": "jest src/js/**/*.test.js",
@@ -23,6 +23,13 @@
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.7.1",
     "enzyme-adapter-react-16.3": "^1.4.1",
+    "eslint": "^5.12.0",
+    "eslint-config-react": "^1.1.7",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jest": "^22.1.2",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-react": "^7.12.3",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
     "jest": "^23.6.0",
@@ -40,6 +47,7 @@
     "vis": "^4.18.0",
     "webpack": "^4.28.3",
     "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.14"
+    "webpack-dev-server": "^3.1.14",
+    "yarn": "^1.12.3"
   }
 }
