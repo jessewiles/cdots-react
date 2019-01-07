@@ -16,10 +16,11 @@ class Edit extends Component {
             dots: [],
             showConfirmDeleteModal: false
         }
+        this.addDot = this.addDot.bind(this)
+        this.cancelDelete = this.cancelDelete.bind(this)
         this.confirmDelete = this.confirmDelete.bind(this)
         this.doDelete = this.doDelete.bind(this)
         this.doSave = this.doSave.bind(this)
-        this.cancelDelete = this.cancelDelete.bind(this)
         this.removeDot = this.removeDot.bind(this)
         this.updateState = this.updateState.bind(this)
     }
@@ -30,6 +31,12 @@ class Edit extends Component {
                 this.setState({dots: data.dots})
             })
         })
+    }
+
+    addDot(e) {
+        let dots = this.state.dots.slice()
+        dots.push({id: 'd'+ Math.random().toString().substring(3), content: '<New Dot>', start: moment().format()})
+        this.setState({dots: dots})
     }
 
     doSave(e) {
@@ -117,7 +124,7 @@ class Edit extends Component {
                 <Timeline name={name}/>
                 <div className="dots">
                     <div id="dotid-add">
-                        <div><b><Link to={`/add/${name}`}>Add a dot</Link></b></div>
+                        <div><Button bsStyle="link" onClick={this.addDot}>Add dot</Button></div>
                     </div>
                     {this.state.dots.map((dot) => {
                         return (
