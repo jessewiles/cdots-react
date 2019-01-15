@@ -111,6 +111,18 @@ func (m *MongoDB) GetTimeline(name string) (tl Timeline, err error) {
 	return tl, err
 }
 
+func (m *MongoDB) NewTimeline(tl *Timeline) (err error) {
+	session := m.Session.Clone()
+	defer session.Close()
+
+	err = session.DB(m.Database).C("timelines").Insert(
+		bson.M{
+			"name": tl.Name,
+			"dots": []bson.M{},
+		})
+	return
+}
+
 func (m *MongoDB) SaveTimeline(name string, tl *Timeline) (err error) {
 	session := m.Session.Clone()
 	defer session.Close()

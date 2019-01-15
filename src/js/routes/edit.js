@@ -27,7 +27,7 @@ class Edit extends Component {
     componentDidMount() {
         fetch('/api/timeline/' + this.props.match.params.name).then(res => {
             res.json().then(data => {
-                this.setState({ dots: data.dots })
+                this.setState({ dots: data.dots || [] })
             })
         })
     }
@@ -44,7 +44,7 @@ class Edit extends Component {
                 method: 'post',
                 body: JSON.stringify({
                     name: this.props.match.params.name,
-                    dots: this.state.dots })
+                    dots: this.state.dots || [] })
             })
     }
 
@@ -69,6 +69,7 @@ class Edit extends Component {
         for (var i = 0; i < dots.length; i++) {
             let dot = dots[i]
             if (state.id === dot.id) {
+                state.pushUpdate = false
                 dots[i] = state
                 break
             }

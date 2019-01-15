@@ -62,6 +62,39 @@ func getTimeline(c *gin.Context) { // {{{
 	}
 }
 
+func newTimeline(c *gin.Context) {
+	mongo, ok := c.Keys["mongo"].(*MongoDB)
+	if !ok {
+		c.JSON(400, gin.H{"message": "can't reach db", "body": nil})
+	}
+
+	body, err := ioutil.ReadAll(c.Request.Body)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"message": fmt.Sprintf("Error reading data from request: %v", err),
+			"body":    nil,
+		})
+	}
+	tl := Timeline{}
+	err = json.Unmarshal(body, &tl)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"message": fmt.Sprintf("Error unmarshaling timeline from request: %v: %s", err, string(body)),
+			"body":    nil,
+		})
+		return
+	}
+	err = mongo.NewTimeline(&tl)
+	if err != nil {
+		c.JSON(400, gin.H{
+			"message": fmt.Sprintf("Error making new timeline: %v", err),
+			"body":    nil,
+		})
+		return
+	}
+	c.JSON(202, nil)
+}
+
 func saveTimeline(c *gin.Context) {
 	mongo, ok := c.Keys["mongo"].(*MongoDB)
 	if !ok {
@@ -127,6 +160,7 @@ func SetupRouter() *gin.Engine {
 
 	router.Static("/static/", Config.StaticDirectory)
 	router.GET("/", siteIndexHandler)
+	router.POST("/api/add", newTimeline)
 	router.GET("/api/timelines", getTimelines)
 	router.GET("/api/timeline/:name", getTimeline)
 	router.POST("/api/timeline/:name", saveTimeline)
