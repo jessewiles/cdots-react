@@ -9,7 +9,8 @@ class Dot extends Component {
             id: this.props.dot.id,
             content: this.props.dot.content,
             start: this.props.dot.start,
-            end: this.props.dot.end
+            end: this.props.dot.end,
+            pushUpdate: false
         }
         this.handleCaptionChange = this.handleCaptionChange.bind(this)
         this.handleCloseDot = this.handleCloseDot.bind(this)
@@ -18,7 +19,9 @@ class Dot extends Component {
     }
 
     componentDidUpdate() {
-        this.props.updateState(this.state)
+        if (this.state.pushUpdate) {
+            this.props.updateState(this.state)
+        }
     }
 
     handleCloseDot(e) {
@@ -26,18 +29,18 @@ class Dot extends Component {
     }
 
     handleCaptionChange(e) {
-        this.setState({ content: e.target.value })
+        this.setState({ content: e.target.value, pushUpdate: true })
     }
 
     handleStartChange(e) {
-        this.setState({ start: e })
+        this.setState({ start: e, pushUpdate: true })
     }
 
     handleEndChange(e) {
         if (e === "") {
-            this.setState({ end: null })
+            this.setState({ end: null, pushUpdate: true })
         } else {
-            this.setState({ end: e })
+            this.setState({ end: e, pushUpdate: true })
         }
     }
 
