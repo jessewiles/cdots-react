@@ -1,7 +1,7 @@
 {
   "AWSEBDockerrunVersion": "1",
   "Image": {
-    "Name": "jessewiles/cdots:latest",
+    "Name": "jessewiles/cdots:0.0.2-rc5",
     "Update": "true"
   },
   "Authentication": {
