@@ -1,12 +1,13 @@
+DOCKER_TAG=latest
+
 all: build
 
 build: clean
-	@npm rum build
+	@npm run build
 	@go build -o bin/server ./src/**/*.go
 
 clean:
-	@mkdir -p bin
-	@rm -r ./bin/ > /dev/null 2>&1
+	-rm -r ./bin/ > /dev/null 2>&1
 
 eslint:
 	@node_modules/eslint/bin/eslint.js src/js
@@ -20,6 +21,12 @@ test-go:
 test: eslint test-js test-go
 
 docker-build:
-	@rm ./bin/linserver > /dev/null 2>&1
+	-rm ./bin/linserver > /dev/null 2>&1
+	@npm run build
 	@GOOS=linux go build -o bin/linserver ./src/**/*.go
-	@docker build -t jessewiles/cdots:0.1 .
+	@docker build -t jessewiles/cdots:latest .
+
+docker-deploy:
+	docker tag jessewiles/cdots:latest jessewiles/cdots:$(DOCKER_TAG)
+	docker push jessewiles/cdots:$(DOCKER_TAG)
+	docker push jessewiles/cdots:latest
