@@ -12,4 +12,4 @@ ENV CDOTS_MONGO_PORT=27017
 
 EXPOSE 8080:8080
 
-CMD /cdots/server
+CMD /cdots/linserver
