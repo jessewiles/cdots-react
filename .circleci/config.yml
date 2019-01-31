@@ -27,10 +27,15 @@ jobs:
 
   build_deploy:
     docker:
-      - image: circleci/golang:1.10
+      - image: circleci/golang:1.11-node
     steps:
       - checkout
       - setup_remote_docker
+
+      - run:
+          command:
+            npm install
+
       - run:
           name: docker login
           command: |
