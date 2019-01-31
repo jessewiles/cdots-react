@@ -23,7 +23,7 @@ test: eslint test-js test-go
 docker-build:
 	-rm ./bin/linserver > /dev/null 2>&1
 	@npm run build
-	@GOOS=linux go build -o bin/linserver ./src/**/*.go
+	@GOOS=linux GOARCH=amd64 go build -o bin/linserver ./src/**/*.go
 	@docker build -t jessewiles/cdots:latest .
 
 docker-deploy:
