@@ -16,7 +16,12 @@ class Timeline extends Component {
     }
 
     render() {
-        return (<div className="timeline" />)
+        return (
+            <div>
+                <h2> {this.props.name} </h2>
+                <div className="timeline" />
+            </div>
+        )
     }
 }
 

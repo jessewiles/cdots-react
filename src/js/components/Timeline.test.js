@@ -2,7 +2,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import '../util/setup.js'
 
-import { TimelineList } from './Timeline.js'
+import Timeline, { TimelineList } from './Timeline.js'
 
 let timelines = [{
     id: 'abc',
@@ -59,7 +59,30 @@ describe('<TimlineList />', () => {
             )
         }
         global.fetch = mockFetch(timelines) // eslint-disable-line no-undef
-        shallow(<TimelineList />)
+        wrapper = shallow(<TimelineList />)
+        expect(global.fetch).toHaveBeenCalledTimes(1) // eslint-disable-line no-undef
+    })
+})
+
+describe('<Timeline />', () => {
+    test('Timeline displays a title', () => {
+        let wrapper
+        let mockFetch = (data) => {
+            return jest.fn().mockImplementation(() =>
+                Promise.resolve({
+                    ok: true,
+                    json: () => Promise.resolve({
+                        then: async (f, r) => {
+                            f(data)
+                            await Promise.resolve({})
+                        }
+                    })
+                })
+            )
+        }
+        global.fetch = mockFetch(timelines[0]) // eslint-disable-line no-undef
+        wrapper = shallow(<Timeline name="omega" />)
+        expect(wrapper.find('div').first().html()).toContain('<h2> omega </h2>')
         expect(global.fetch).toHaveBeenCalledTimes(1) // eslint-disable-line no-undef
     })
 })
