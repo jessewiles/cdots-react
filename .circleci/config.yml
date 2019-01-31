@@ -29,6 +29,8 @@ jobs:
     working_directory: ~/repo
     docker:
       - image: circleci/golang:1.11-node
+    environment:
+        - GOPATH: /home/circleci/repo/vendor:/home/circleci/repo/src/go
     steps:
       - checkout
       - setup_remote_docker
