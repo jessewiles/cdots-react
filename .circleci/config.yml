@@ -26,6 +26,7 @@ jobs:
             make test
 
   build_deploy:
+    working_directory: ~/repo
     docker:
       - image: circleci/golang:1.11-node
     steps:
