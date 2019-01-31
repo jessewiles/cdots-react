@@ -39,7 +39,6 @@ func getTimelines(c *gin.Context) { // {{{
 	}
 
 	tl, err := mongo.GetTimelines()
-	// fmt.Printf("\ndata: %v, ok: %v\n", data, ok)
 	if err != nil {
 		c.JSON(400, gin.H{"message": "can't get data from database", "body": nil})
 	} else {

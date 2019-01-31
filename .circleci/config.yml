@@ -25,9 +25,54 @@ jobs:
           command:
             make test
 
+  build_deploy:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/golang:1.11-node
+    environment:
+        - GOPATH: /home/circleci/repo/vendor:/home/circleci/repo/src/go
+    steps:
+      - checkout
+      - setup_remote_docker
+
+      - run:
+          command:
+            npm install
+
+      - run:
+          command: |
+            mkdir /home/circleci/repo/vendor/src
+            cd /home/circleci/repo/vendor/src
+            ln -s ../github.com github.com
+            ln -s ../golang.org golang.org
+            ln -s ../gopkg.in gopkg.in
+
+      - run:
+          name: docker login
+          command: |
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
+            docker info
+      - run:
+          name: docker build and push
+          command: |
+            make docker-build
+            make docker-deploy DOCKER_TAG=${CIRCLE_TAG}
+
 workflows:
   version: 2
   # runs on feature branch commits
   test:
     jobs:
       - test
+
+  # runs on version tags
+  test_build_deploy:
+    jobs:
+      - build_deploy:
+          filters:
+            tags:
+              only:
+                - /^[0-9]+.[0-9]+.[0-9]+$/
+                - /^[0-9]+.[0-9]+.[0-9]+-rc[0-9]+$/
+            branches:
+              ignore: /.*/

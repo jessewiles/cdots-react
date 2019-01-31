@@ -1,0 +1,17 @@
+{
+  "AWSEBDockerrunVersion": "1",
+  "Image": {
+    "Name": "jessewiles/cdots:latest",
+    "Update": "true"
+  },
+  "Authentication": {
+      "Bucket": "elasticbeanstalk-us-east-1-206390559540",
+      "Key": "dockercfg"
+  },
+  "Ports": [
+    {
+      "ContainerPort": "8080"
+    }
+  ],
+  "Logging": "/var/log/"
+}

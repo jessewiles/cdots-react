@@ -48,14 +48,18 @@ func (m *MongoDB) SetDefault() {
 	m.StdEventTTL = 20 * time.Minute
 	m.Info = &mgo.DialInfo{
 		Addrs:    []string{m.Addrs},
-		Timeout:  60 * time.Second,
-		Database: m.Database,
+		Timeout:  30 * time.Second,
+		Database: "cdots",
+		Username: Config.MongoUser,
+		Password: Config.MongoPassword,
 	}
 }
 
 func (mongo *MongoDB) SetSession() (err error) {
 	mongo.Session, err = mgo.DialWithInfo(mongo.Info)
+	log.Printf("Dialing mongo with info: %v", mongo.Info)
 	if err != nil {
+		log.Printf("%v", err)
 		mongo.Session, err = mgo.Dial(mongo.Host)
 		if err != nil {
 			return err
