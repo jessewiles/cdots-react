@@ -57,7 +57,6 @@ func (m *MongoDB) SetDefault() {
 
 func (mongo *MongoDB) SetSession() (err error) {
 	mongo.Session, err = mgo.DialWithInfo(mongo.Info)
-	log.Printf("Dialing mongo with info: %v", mongo.Info)
 	if err != nil {
 		log.Printf("%v", err)
 		mongo.Session, err = mgo.Dial(mongo.Host)
