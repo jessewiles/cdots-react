@@ -20,6 +20,10 @@ jobs:
             ln -s ../github.com github.com
             ln -s ../golang.org golang.org
             ln -s ../gopkg.in gopkg.in
+            mkdir -p /home/circleci/repo/vendor/src/github.com/jessewiles/cdots/src/go/mongo
+            cd /home/circleci/repo/vendor/src/github.com/jessewiles/cdots/src/go/mongo
+            ln -s /home/circleci/repo/src/go/mongo/mongo.go mongo.go
+            ln -s /home/circleci/repo/src/go/mongo/config.go config.go
 
       - run:
           command:
@@ -46,6 +50,10 @@ jobs:
             ln -s ../github.com github.com
             ln -s ../golang.org golang.org
             ln -s ../gopkg.in gopkg.in
+            mkdir -p /home/circleci/repo/vendor/src/github.com/jessewiles/cdots/src/go/mongo
+            cd /home/circleci/repo/vendor/src/github.com/jessewiles/cdots/src/go/mongo
+            ln -s /home/circleci/repo/src/go/mongo/mongo.go mongo.go
+            ln -s /home/circleci/repo/src/go/mongo/config.go config.go
 
       - run:
           name: docker login

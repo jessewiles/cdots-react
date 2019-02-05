@@ -10,6 +10,7 @@ import (
 	//"github.com/gin-contrib/sessions"
 	//"github.com/gin-contrib/sessions/mongo"
 	"github.com/gin-gonic/gin"
+	"github.com/jessewiles/cdots/src/go/mongo"
 	uuid "github.com/satori/go.uuid"
 )
 
@@ -33,12 +34,12 @@ func uuidHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func getTimelines(c *gin.Context) { // {{{
-	mongo, ok := c.Keys["mongo"].(*MongoDB)
+	m, ok := c.Keys["mongo"].(*mongo.MongoDB)
 	if !ok {
 		c.JSON(400, gin.H{"message": "can't reach db", "body": nil})
 	}
 
-	tl, err := mongo.GetTimelines()
+	tl, err := m.GetTimelines()
 	if err != nil {
 		c.JSON(400, gin.H{"message": "can't get data from database", "body": nil})
 	} else {
@@ -47,13 +48,13 @@ func getTimelines(c *gin.Context) { // {{{
 } // }}}
 
 func getTimeline(c *gin.Context) { // {{{
-	mongo, ok := c.Keys["mongo"].(*MongoDB)
+	m, ok := c.Keys["mongo"].(*mongo.MongoDB)
 	if !ok {
 		c.JSON(400, gin.H{"message": "can't reach db", "body": nil})
 	}
 
 	name := c.Param("name")
-	tl, err := mongo.GetTimeline(name)
+	tl, err := m.GetTimeline(name)
 	if err != nil {
 		c.JSON(400, gin.H{"message": "can't get timeline from database", "body": nil})
 	} else {
@@ -62,7 +63,7 @@ func getTimeline(c *gin.Context) { // {{{
 }
 
 func newTimeline(c *gin.Context) {
-	mongo, ok := c.Keys["mongo"].(*MongoDB)
+	m, ok := c.Keys["mongo"].(*mongo.MongoDB)
 	if !ok {
 		c.JSON(400, gin.H{"message": "can't reach db", "body": nil})
 	}
@@ -74,7 +75,7 @@ func newTimeline(c *gin.Context) {
 			"body":    nil,
 		})
 	}
-	tl := Timeline{}
+	tl := mongo.Timeline{}
 	err = json.Unmarshal(body, &tl)
 	if err != nil {
 		c.JSON(400, gin.H{
@@ -83,7 +84,7 @@ func newTimeline(c *gin.Context) {
 		})
 		return
 	}
-	err = mongo.NewTimeline(&tl)
+	err = m.NewTimeline(&tl)
 	if err != nil {
 		c.JSON(400, gin.H{
 			"message": fmt.Sprintf("Error making new timeline: %v", err),
@@ -95,7 +96,7 @@ func newTimeline(c *gin.Context) {
 }
 
 func saveTimeline(c *gin.Context) {
-	mongo, ok := c.Keys["mongo"].(*MongoDB)
+	m, ok := c.Keys["mongo"].(*mongo.MongoDB)
 	if !ok {
 		c.JSON(400, gin.H{"message": "Database is not available", "body": nil})
 	}
@@ -108,7 +109,7 @@ func saveTimeline(c *gin.Context) {
 			"body":    nil,
 		})
 	}
-	tl := Timeline{}
+	tl := mongo.Timeline{}
 	err = json.Unmarshal(body, &tl)
 	if err != nil {
 		c.JSON(400, gin.H{
@@ -117,7 +118,7 @@ func saveTimeline(c *gin.Context) {
 		})
 		return
 	}
-	err = mongo.SaveTimeline(name, &tl)
+	err = m.SaveTimeline(name, &tl)
 	if err != nil {
 		c.JSON(400, gin.H{
 			"message": fmt.Sprintf("Error saving timeline: %v", err),
@@ -130,14 +131,14 @@ func saveTimeline(c *gin.Context) {
 
 // deleteTimeline
 func deleteTimeline(c *gin.Context) {
-	mongo, ok := c.Keys["mongo"].(*MongoDB)
+	m, ok := c.Keys["mongo"].(*mongo.MongoDB)
 	if !ok {
 		c.JSON(400, gin.H{"message": "Database is not available", "body": nil})
 	}
 
 	name := c.Param("name")
 
-	err := mongo.DeleteTimeline(name)
+	err := m.DeleteTimeline(name)
 	if err != nil {
 		c.JSON(400, gin.H{
 			"message": fmt.Sprintf("Error deleting timeline: %v", err),
@@ -149,13 +150,13 @@ func deleteTimeline(c *gin.Context) {
 }
 
 func SetupRouter() *gin.Engine {
-	mongo := MongoDB{}
-	mongo.SetDefault()
+	m := mongo.MongoDB{}
+	m.SetDefault()
 
 	router := gin.Default()
 	router.LoadHTMLGlob(Config.TemplateDirectory)
 	router.Use(gin.Recovery())
-	router.Use(MiddleDB(&mongo))
+	router.Use(mongo.MiddleDB(&m))
 
 	router.Static("/static/", Config.StaticDirectory)
 	router.GET("/", siteIndexHandler)
