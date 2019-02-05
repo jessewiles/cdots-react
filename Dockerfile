@@ -10,6 +10,10 @@ ENV CDOTS_STATIC_DIR=/cdots/public
 ENV CDOTS_MONGO_HOST=mdb-mongodb.cdots.svc
 ENV CDOTS_MONGO_PORT=27017
 
+LABEL "co.elastic.logs/fileset.stdout"="access"
+LABEL "co.elastic.logs/fileset.stderr"="error"
+LABEL "co.elastic.metrics/metricsets"="status"
+
 EXPOSE 8080:8080
 
 WORKDIR /cdots
