@@ -1,4 +1,4 @@
-package main
+package mongo
 
 import (
 	"fmt"
@@ -47,8 +47,8 @@ type MongoDB struct {
 }
 
 func (m *MongoDB) SetDefault() {
-	m.Host = Config.MongoHost
-	m.Addrs = fmt.Sprintf("%s:%s", Config.MongoHost, Config.MongoPort)
+	m.Host = config.host
+	m.Addrs = fmt.Sprintf("%s:%s", config.host, config.port)
 	m.Database = "cdots"
 	m.EventTTLAfterEnd = 1 * time.Second
 	m.StdEventTTL = 20 * time.Minute
@@ -56,16 +56,16 @@ func (m *MongoDB) SetDefault() {
 		Addrs:    []string{m.Addrs},
 		Timeout:  30 * time.Second,
 		Database: "cdots",
-		Username: Config.MongoUser,
-		Password: Config.MongoPassword,
+		Username: config.user,
+		Password: config.password,
 	}
 }
 
-func (mongo *MongoDB) SetSession() (err error) {
-	mongo.Session, err = mgo.DialWithInfo(mongo.Info)
+func (m *MongoDB) SetSession() (err error) {
+	m.Session, err = mgo.DialWithInfo(m.Info)
 	if err != nil {
 		log.Printf("%v", err)
-		mongo.Session, err = mgo.Dial(mongo.Host)
+		m.Session, err = mgo.Dial(m.Host)
 		if err != nil {
 			return err
 		}
