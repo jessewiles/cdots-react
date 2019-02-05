@@ -29,6 +29,12 @@ type Dot struct {
 	End     *time.Time `json:"end,omitempty"`
 }
 
+type TimelineKey struct {
+	ID         string `json:"id"`
+	Key        string `json:"key"`
+	TimelineID string `json:"timelineID,omitempty"`
+}
+
 type MongoDB struct {
 	Host             string
 	Port             string
@@ -159,5 +165,15 @@ func (m *MongoDB) DeleteTimeline(name string) (err error) {
 	defer session.Close()
 
 	err = session.DB(m.Database).C("timelines").Remove(bson.M{"name": name})
+	return
+}
+
+func (m *MongoDB) NewTimelineKey(tlk *TimelineKey) (err error) {
+	session := m.Session.Clone()
+	defer session.Close()
+	err = session.DB(m.Database).C("timelineKeys").Insert(
+		bson.M{
+			"key": tlk.Key,
+		})
 	return
 }
