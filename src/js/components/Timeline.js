@@ -50,7 +50,7 @@ export class TimelineList extends Component {
             <ul>
                 {this.state.timelines.map((tline) => {
                     return (
-                        <li key={"lix" + tline.id}>
+                        <li key={"lix" + tline.id || `i${Math.random().toString().substring(10)}`}>
                             <Link
                                 to={"/view/" + tline.name}
                                 key={tline.id}>
