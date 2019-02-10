@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Timeline | Basic demo</title>
+
+  <style type="text/css">
+    body, html {
+      font-family: sans-serif;
+    }
+  </style>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.0/handlebars.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="visualization"></div>
+
+<script id="Item-template" type="text/x-handlebars-template">
+  <h4>{{header}}</h4>
+  <p>{{description}}</p>
+</script>
+<script type="text/javascript">
+  // DOM element where the Timeline will be attached
+  var container = document.getElementById('visualization');
+
+  // Create a DataSet (allows two way data-binding)
+  var items = new vis.DataSet([
+    {id: 1, header: 'Item 1', description: 'Very very important things...', content: 'Item 1', start: '2013-04-20', group: 'a1'},
+    {id: 2, header: 'Item 2', start: '2013-04-14', group: 'a2'},
+    {id: 3, header: 'Item 3', start: '2013-04-18', group: 'a1'},
+    {id: 4, header: 'Item 4', start: '2013-04-16', end: '2013-04-19', group: 'a2'},
+    {id: 5, header: 'Item 5', start: '2013-04-25', group: 'a1'},
+    {id: 6, header: 'Item 6', start: '2013-04-27', group: 'a2'}
+  ]);
+
+  var groups = new vis.DataSet([
+    {id: 'a1', content: 'Alpha', style: 'background-color: pink'},
+    {id: 'a2', content: 'Beta', style: 'background-color: lightgreen'}
+    ]);
+
+var source = document.getElementById('Item-template').innerHTML;
+var template = Handlebars.compile(source);
+
+  // Configuration for the Timeline
+  var options = {
+    template: template,
+    editable: true,
+    onMove: function(Item, callback) {
+      console.log(Item);
+      console.log(callback.toString());
+      callback(Item);
+    }
+  };
+
+  // Create a Timeline
+  var timeline = new vis.Timeline(container, items, groups, options);
+</script>
+</body>
+</html>
