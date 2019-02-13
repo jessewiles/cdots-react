@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { TimelineList } from '../components/Timeline.js'
+import TimelineList from '../containers/TimelineList.js'
 
 class Home extends Component {
     render() {

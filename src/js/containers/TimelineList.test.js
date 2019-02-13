@@ -2,7 +2,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import '../util/setup.js'
 
-import Timeline from './Timeline.js'
+import TimelineList from './TimelineList.js'
 
 let timelines = [{
     id: 'abc',
@@ -38,8 +38,9 @@ let timelines = [{
     }]
 }]
 
-describe('<Timeline />', () => {
-    test('Timeline displays a title', () => {
+
+describe('<TimlineList />', () => {
+    test('Sorts list by name', () => {
         let wrapper
         let mockFetch = (data) => {
             return jest.fn().mockImplementation(() =>
@@ -49,14 +50,16 @@ describe('<Timeline />', () => {
                         then: async (f, r) => {
                             f(data)
                             await Promise.resolve({})
+                            wrapper.update()
+                            expect(wrapper.instance().state.timelines.length).toBe(2)
+                            expect(wrapper.instance().state.timelines[0].name).toEqual('alpha')
                         }
                     })
                 })
             )
         }
-        global.fetch = mockFetch(timelines[0]) // eslint-disable-line no-undef
-        wrapper = shallow(<Timeline name="omega" />)
-        expect(wrapper.find('div').first().html()).toContain('<h2> omega </h2>')
+        global.fetch = mockFetch(timelines) // eslint-disable-line no-undef
+        wrapper = shallow(<TimelineList />)
         expect(global.fetch).toHaveBeenCalledTimes(1) // eslint-disable-line no-undef
     })
 })

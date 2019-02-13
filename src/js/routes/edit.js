@@ -34,13 +34,14 @@ class Edit extends Component {
 
     addDot(e) {
         let dots = this.state.dots.slice()
-        dots.push({ id: 'd' + Math.random().toString().substring(3), content: '<New Dot>', start: moment().format() })
+        let aid = `d${Math.random().toString().substring(10)}`
+        dots.push({ id: aid, content: '{New Dot}', start: moment().format() })
         this.setState({ dots: dots })
     }
 
     doSave(e) {
         fetch(
-            '/api/timeline/' + this.props.match.params.name, {
+            `/api/timeline/{this.props.match.params.name}`, {
                 method: 'post',
                 body: JSON.stringify({
                     name: this.props.match.params.name,
@@ -49,7 +50,7 @@ class Edit extends Component {
     }
 
     doDelete(e) {
-        fetch('/api/timeline/' + this.props.match.params.name, {
+        fetch(`/api/timeline/{this.props.match.params.name}`, {
             method: 'delete'
         }).then(() => {
             document.location = '/#/'
