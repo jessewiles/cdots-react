@@ -1,7 +1,9 @@
 import { combineReducers } from 'redux'
-import { REQUEST_TIMELINES, RECEIVE_TIMELINES } from '../actions'
+import { connectRouter } from 'connected-react-router'
+import { REQUEST_TIMELINES, RECEIVE_TIMELINES } from './actions.js'
+import { REQUEST_TIMELINE, RECEIVE_TIMELINE } from './actions.js'
 
-const timelines = (state, action) => {
+const timelines = (state = { data: [], loading: true }, action) => {
     switch (action.type) {
         case REQUEST_TIMELINES:
             return {
@@ -9,8 +11,8 @@ const timelines = (state, action) => {
             }
         case RECEIVE_TIMELINES:
             return {
-                ...state,
-                items: action.timelines,
+                data: action.data,
+                loading: false,
                 lastUpdated: action.receivedAt
             }
         default:
@@ -18,6 +20,29 @@ const timelines = (state, action) => {
     }
 }
 
-const rootReducer = combineReducers({ timelines })
+const timeline = (state = { data: {}, loading: true }, action) => {
+    switch (action.type) {
+        case REQUEST_TIMELINE:
+            return {
+                ...state
+            }
+        case RECEIVE_TIMELINE:
+            return {
+                data: action.data,
+                loading: false,
+                lastUpdated: action.receivedAt
+            }
+        default:
+            return state
+    }
+}
 
-export default rootReducer
+const createRootReducer = function(history) {
+    return combineReducers({
+        router: connectRouter(history),
+        timelines,
+        timeline
+    })
+}
+
+export default createRootReducer

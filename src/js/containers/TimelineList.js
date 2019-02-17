@@ -1,49 +1,50 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { fetchTimelines } from '../dux/actions'
 
 class TimelineList extends Component {
     static propTypes = {
         timeslines: PropTypes.array
     }
 
-    constructor(props) {
-        super(props)
-
-        this.state = {
-            timelines: []
-        }
-    }
-
     componentDidMount() {
-        window.fetch('/api/timelines').then(res => {
-            res.json().then(data => {
-                if (data !== null) {
-                    data.sort((a, b) => (a.name < b.name) ? -1 : 1)
-                    this.setState({ timelines: data })
-                }
-            })
-        })
+        this.props.dispatch(fetchTimelines())
     }
 
     render() {
+        let content = (<div>Loading...</div>)
+        if (!this.props.loading) {
+            content = (
+                <ul>
+                    {this.props.timelines.map((tline) => {
+                        let aid = tline.id || `i${Math.random().toString().substring(10)}`
+                        return (
+                            <li key={"lix" + aid}>
+                                <Link
+                                    to={"/view/" + tline.name}
+                                    key={tline.id}>
+                                    {tline.name}
+                                </Link>
+                            </li>
+                        )
+                    })}
+                </ul>
+            )
+        }
+
         return (
-            <ul>
-                {this.state.timelines.map((tline) => {
-                    let aid = tline.id || `i${Math.random().toString().substring(10)}`
-                    return (
-                        <li key={"lix" + aid}>
-                            <Link
-                                to={"/view/" + tline.name}
-                                key={tline.id}>
-                                {tline.name}
-                            </Link>
-                        </li>
-                    )
-                })}
-            </ul>
+            <div>
+                {content}
+            </div>
         )
     }
 }
 
-export default TimelineList
+const mapStateToProps = (state) => ({
+    timelines: state.timelines.data,
+    loading: state.timelines.loading
+})
+
+export default connect(mapStateToProps)(TimelineList)
