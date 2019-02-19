@@ -2,15 +2,10 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { fetchTimelines } from '../dux/actions'
 
 class TimelineList extends Component {
     static propTypes = {
         timeslines: PropTypes.array
-    }
-
-    componentDidMount() {
-        this.props.dispatch(fetchTimelines())
     }
 
     render() {

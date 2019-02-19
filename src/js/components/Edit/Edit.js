@@ -5,8 +5,8 @@ import { Modal, Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 
-import Timeline from '../containers/Timeline.js'
-import Dot from '../components/Dot.js'
+import Timeline from '../Timeline/Timeline'
+import Dot from '../Dot/Dot'
 
 
 class Edit extends Component {

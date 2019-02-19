@@ -7,7 +7,8 @@ const timelines = (state = { data: [], loading: true }, action) => {
     switch (action.type) {
         case REQUEST_TIMELINES:
             return {
-                ...state
+                ...state,
+                loading: true
             }
         case RECEIVE_TIMELINES:
             return {
@@ -20,11 +21,12 @@ const timelines = (state = { data: [], loading: true }, action) => {
     }
 }
 
-const timeline = (state = { data: {}, loading: true }, action) => {
+const timeline = (state = { data: {dots: []}, loading: true }, action) => {
     switch (action.type) {
         case REQUEST_TIMELINE:
             return {
-                ...state
+                ...state,
+                loading: true
             }
         case RECEIVE_TIMELINE:
             return {
