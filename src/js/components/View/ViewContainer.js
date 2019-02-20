@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { fetchTimeline } from '../../dux/actions'
+import { fetchTimeline } from '../../dux/actions/timelines'
 import View from './View'
 
 

@@ -20,7 +20,7 @@ class Dot extends Component {
 
     componentDidUpdate() {
         if (this.state.pushUpdate) {
-            this.props.updateState(this.state)
+            this.props.updateDot(this.state)
         }
     }
 

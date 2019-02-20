@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { fetchTimelines } from '../../dux/actions'
+import { fetchTimelines } from '../../dux/actions/timelines'
 import Home from './Home'
 
 const mapStateToProps = (state) => ({
