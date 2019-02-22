@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { Modal, Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 
-import Timeline from '../components/Timeline.js'
-import Dot from '../components/Dot.js'
+import Timeline from '../Timeline/Timeline'
+import Dot from '../Dot/Dot'
 
 
 class Edit extends Component {
@@ -12,7 +14,6 @@ class Edit extends Component {
         super(props)
 
         this.state = {
-            dots: [],
             showConfirmDeleteModal: false
         }
         this.addDot = this.addDot.bind(this)
@@ -24,32 +25,25 @@ class Edit extends Component {
         this.updateState = this.updateState.bind(this)
     }
 
-    componentDidMount() {
-        fetch('/api/timeline/' + this.props.match.params.name).then(res => {
-            res.json().then(data => {
-                this.setState({ dots: data.dots || [] })
-            })
-        })
-    }
-
     addDot(e) {
-        let dots = this.state.dots.slice()
-        dots.push({ id: 'd' + Math.random().toString().substring(3), content: '<New Dot>', start: moment().format() })
+        let dots = this.props.dots.slice()
+        let aid = `d${Math.random().toString().substring(10)}`
+        dots.push({ id: aid, content: '{New Dot}', start: moment().format() })
         this.setState({ dots: dots })
     }
 
     doSave(e) {
         fetch(
-            '/api/timeline/' + this.props.match.params.name, {
+            `/api/timeline/{this.props.match.params.name}`, {
                 method: 'post',
                 body: JSON.stringify({
                     name: this.props.match.params.name,
-                    dots: this.state.dots || [] })
+                    dots: this.props.dots || [] })
             })
     }
 
     doDelete(e) {
-        fetch('/api/timeline/' + this.props.match.params.name, {
+        fetch(`/api/timeline/{this.props.match.params.name}`, {
             method: 'delete'
         }).then(() => {
             document.location = '/#/'
@@ -65,7 +59,7 @@ class Edit extends Component {
     }
 
     updateState(state) {
-        let dots = this.state.dots.slice()
+        let dots = this.props.dots.slice()
         for (var i = 0; i < dots.length; i++) {
             let dot = dots[i]
             if (state.id === dot.id) {
@@ -79,8 +73,8 @@ class Edit extends Component {
 
     removeDot(dotid) {
         let newDots = []
-        for (var i = 0; i < this.state.dots.length; i++) {
-            let dot = this.state.dots[i]
+        for (var i = 0; i < this.props.dots.length; i++) {
+            let dot = this.props.dots[i]
             if (dotid !== dot.id) {
                 newDots.push(Object.assign({}, dot))
             }
@@ -113,21 +107,12 @@ class Edit extends Component {
 
         return (
             <div>
-                <div className="banner actions">
-                    <Link to="/">Home</Link>
-                    <span> | </span>
-                    <Link to={`/view/${name}`}>View</Link>
-                    <span> | </span>
-                    <Link to={`/view/${name}`} onClick={this.doSave}>Save</Link>
-                    <span> | </span>
-                    <Button bsStyle="link" onClick={this.confirmDelete}> Delete </Button>
-                </div>
                 <Timeline name={name}/>
                 <div className="dots">
                     <div id="dotid-add">
                         <div><Button bsStyle="link" onClick={this.addDot}>Add dot</Button></div>
                     </div>
-                    {this.state.dots.map((dot) => {
+                    {this.props.dots.map((dot) => {
                         return (
                             <Dot dot={dot} key={dot.id} updateState={this.updateState} removeDot={this.removeDot} />)
                     })}
@@ -138,4 +123,9 @@ class Edit extends Component {
     }
 }
 
-export default Edit
+const mapStateToProps = (state) => ({
+    dots: state.timeline.data.dots || [],
+    pathname: state.router.location.pathname
+})
+
+export default connect(mapStateToProps)(Edit)

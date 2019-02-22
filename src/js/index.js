@@ -1,18 +1,27 @@
+import { AppContainer } from 'react-hot-loader'
+import { Provider } from 'react-redux'
 import React from 'react'
-import { render } from 'react-dom'
-import { HashRouter, Route } from 'react-router-dom'
-import Main from './routes/main.js'
-import Home from './routes/home.js'
-import View from './routes/view.js'
-import Edit from './routes/edit.js'
+import ReactDOM from 'react-dom'
+import App from './App'
+import configureStore, { history } from './configureStore'
 
-render(
-    <HashRouter>
-        <Main>
-            <Route exact path="/" component={Home} />
-            <Route path="/view/:name" component={View} />
-            <Route path="/edit/:name" component={Edit} />
-        </Main>
-    </HashRouter>,
-    document.getElementById('container')
-)
+const store = configureStore()
+const render = () => {
+    ReactDOM.render(
+        <AppContainer>
+            <Provider store={store}>
+                <App history={history} />
+            </Provider>
+        </AppContainer>,
+        document.getElementById('react-root')
+    )
+}
+render()
+
+// Hot reloading
+if (module.hot) { // eslint-disable-line no-undef
+    // Reload components
+    module.hot.accept('./App', () => { // eslint-disable-line no-undef
+        render()
+    })
+}

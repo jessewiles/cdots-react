@@ -28,12 +28,12 @@ var config = {
             }
         ]
     },
-    plugins: [
+    /*plugins: [
         new HtmlWebPackPlugin({
             template: "./src/js/index.html",
             filename: BUILD_DIR + "/index.html2"
         })
-    ]
+    ]*/
 };
 
 module.exports = config;
