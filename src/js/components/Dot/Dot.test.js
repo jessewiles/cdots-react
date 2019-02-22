@@ -1,6 +1,6 @@
 import React from 'react'
 import { mount, shallow } from 'enzyme'
-import '../util/setup.js'
+import '../../util/setup.js'
 
 import Dot from './Dot.js'
 

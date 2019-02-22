@@ -1,4 +1,4 @@
-import { 
+import {
     REQUEST_TIMELINES,
     RECEIVE_TIMELINES,
     REQUEST_TIMELINE,

@@ -55,10 +55,10 @@ export function fetchTimeline(path) {
 export function saveTimeLine(name) {
     return (dispatch, getState) => {
         return fetch(`/api/timeline/${name}`, {
-                method: 'post',
-                body: JSON.stringify({
-                    name: name,
-                    dots: getState().dots.dots || [] })
-            })
+            method: 'post',
+            body: JSON.stringify({
+                name: name,
+                dots: getState().dots.dots || [] })
+        })
     }
 }

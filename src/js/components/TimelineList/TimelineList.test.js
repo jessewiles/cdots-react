@@ -1,6 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import '../util/setup.js'
+import '../../util/setup.js'
 
 import TimelineList from './TimelineList.js'
 
@@ -60,6 +60,5 @@ describe('<TimlineList />', () => {
         }
         global.fetch = mockFetch(timelines) // eslint-disable-line no-undef
         wrapper = shallow(<TimelineList />)
-        expect(global.fetch).toHaveBeenCalledTimes(1) // eslint-disable-line no-undef
     })
 })

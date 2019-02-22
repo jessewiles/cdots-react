@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const INDEX_FILE_FRAGMENT = `<div id="container"></div>`
+const INDEX_FILE_FRAGMENT = `<div id="react-root"></div>`
 
 func TestIndexHandler(t *testing.T) {
 	req, _ := http.NewRequest("GET", "/", nil)

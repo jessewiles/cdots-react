@@ -5,13 +5,13 @@ import {
     REMOVE_DOT,
     UPDATE_DOT } from '../actions/dots'
 
-export const dots = (state = { dots: []  }, action) => {
+export const dots = (state = { dots: [] }, action) => {
     switch (action.type) {
         case ADD_DOT:
             let aid = `d${Math.random().toString().substring(10)}`
-            return { 
+            return {
                 dots: state.dots.map(d => Object.assign({}, d))
-                .concat({ id: aid, content: '{New Dot}', start: moment().format() }) 
+                    .concat({ id: aid, content: '{New Dot}', start: moment().format() })
             }
 
         case HYDRATE_DOTS:
@@ -19,7 +19,7 @@ export const dots = (state = { dots: []  }, action) => {
 
         case REMOVE_DOT:
             let ndots = []
-            for (var i = 0; i < state.dots.length; i++) {
+            for (let i = 0; i < state.dots.length; i++) {
                 let dot = state.dots[i]
                 if (action.dotid !== dot.id) {
                     ndots.push(Object.assign({}, dot))
