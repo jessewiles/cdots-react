@@ -3,7 +3,7 @@ import { mount } from 'enzyme'
 import { MemoryRouter, Route } from 'react-router-dom'
 import '../../util/setup.js'
 
-import Edit from './edit.js'
+import Edit from './Edit.js'
 
 let timeline = {
     name: 'test-timeline',
