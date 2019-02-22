@@ -1,3 +1,4 @@
+import moment from 'moment'
 import {
     ADD_DOT,
     HYDRATE_DOTS,

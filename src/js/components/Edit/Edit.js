@@ -11,7 +11,7 @@ import DotPanel from '../DotPanel/DotPanel'
 
 class Edit extends Component {
     componentDidMount() {
-        this.props.hydrateDots(this.props.timeline.dots)
+        this.props.fetchTimeline(this.props.name)
     }
 
     render() {

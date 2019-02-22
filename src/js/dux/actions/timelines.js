@@ -1,8 +1,9 @@
+import { hydrateDots } from './dots'
+
 export const REQUEST_TIMELINES = 'REQUEST_TIMELINES'
 export const RECEIVE_TIMELINES = 'RECEIVE_TIMELINES'
 export const REQUEST_TIMELINE = 'REQUEST_TIMELINE'
 export const RECEIVE_TIMELINE = 'RECEIVE_TIMELINE'
-
 
 export const requestTimelines = () => ({
     type: REQUEST_TIMELINES
@@ -44,6 +45,20 @@ export function fetchTimeline(path) {
         dispatch(requestTimeline(path))
         return window.fetch(`/api/timeline/${path}`)
             .then(response => response.json())
-            .then(data => dispatch(receiveTimeline(data)))
+            .then(data => {
+                dispatch(hydrateDots(data.dots))
+                dispatch(receiveTimeline(data))
+            })
+    }
+}
+
+export function saveTimeLine(name) {
+    return (dispatch, getState) => {
+        return fetch(`/api/timeline/${name}`, {
+                method: 'post',
+                body: JSON.stringify({
+                    name: name,
+                    dots: getState().dots.dots || [] })
+            })
     }
 }
