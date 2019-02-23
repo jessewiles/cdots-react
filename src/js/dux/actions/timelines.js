@@ -1,29 +1,46 @@
 import { hydrateDots } from './dots'
+import { push } from 'connected-react-router'
 
+export const DELETING_TIMELINE = 'DELETING_TIMELINE'
 export const REQUEST_TIMELINES = 'REQUEST_TIMELINES'
 export const RECEIVE_TIMELINES = 'RECEIVE_TIMELINES'
 export const REQUEST_TIMELINE = 'REQUEST_TIMELINE'
 export const RECEIVE_TIMELINE = 'RECEIVE_TIMELINE'
 
-export const requestTimelines = () => ({
+export const CONFIRM_DELETE = 'SHOW_CONFIRM_DELETE'
+export const CANCEL_DELETE = 'CANCEL_DELETE'
+
+const requestTimelines = () => ({
     type: REQUEST_TIMELINES
 })
 
-export const receiveTimelines = (data) => ({
+const receiveTimelines = (data) => ({
     type: RECEIVE_TIMELINES,
     data: data,
     receivedAt: Date.now()
 })
 
-export const requestTimeline = (name) => ({
+const requestTimeline = (name) => ({
     type: REQUEST_TIMELINE,
     name: name
 })
 
-export const receiveTimeline = (data) => ({
+const receiveTimeline = (data) => ({
     type: RECEIVE_TIMELINE,
     data: data,
     receivedAt: Date.now()
+})
+
+const deletingTimeline = () => ({
+    type: DELETING_TIMELINE
+})
+
+export const confirmDelete = () => ({
+    type: CONFIRM_DELETE
+})
+
+export const cancelDelete = () => ({
+    type: CANCEL_DELETE
 })
 
 export function fetchTimelines() {
@@ -60,5 +77,14 @@ export function saveTimeline(name) {
                 name: name,
                 dots: getState().dots.dots || [] })
         })
+    }
+}
+
+export function deleteTimeline(name) {
+    return (dispatch, getState) => {
+        dispatch(deletingTimeline())
+        return fetch(`/api/timeline/${name}`, {
+            method: 'delete'
+        }).then(() => dispatch(push('/')))
     }
 }
