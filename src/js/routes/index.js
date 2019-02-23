@@ -2,7 +2,7 @@ import React from 'react'
 import { Route, Switch } from 'react-router'
 import EditContainer from '../components/Edit/EditContainer'
 import HomeContainer from '../components/Home/HomeContainer'
-import NavBar from '../components/NavBar/NavBar'
+import NavBar from '../components/NavBar/NavBarContainer'
 import NoMatch from '../components/NoMatch/NoMatch'
 import ViewContainer from '../components/View/ViewContainer'
 

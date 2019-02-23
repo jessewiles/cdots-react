@@ -22,7 +22,7 @@ class View extends Component {
         } else {
             return (
                 <div>
-                    <Timeline dots={this.props.timeline.dots} name={name} />
+                    <Timeline dots={this.props.timeline.dots} name={this.props.name} />
                 </div>
             )
         }
