@@ -4,7 +4,7 @@
   "description": "web application for making timelines",
   "main": "index.js",
   "scripts": {
-    "test": "jest src/js/**/*.test.js",
+    "test": "jest src/js/.*test.js$",
     "watch": "webpack -d --watch",
     "build": "webpack --mode development",
     "serve": "./bin/server"

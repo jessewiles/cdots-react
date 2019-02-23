@@ -52,7 +52,7 @@ export function fetchTimeline(path) {
     }
 }
 
-export function saveTimeLine(name) {
+export function saveTimeline(name) {
     return (dispatch, getState) => {
         return fetch(`/api/timeline/${name}`, {
             method: 'post',
