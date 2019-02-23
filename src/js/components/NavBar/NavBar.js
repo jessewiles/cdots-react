@@ -2,21 +2,38 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-import { saveTimeline } from '../../dux/actions/timelines'
+import {
+    deleteTimeline,
+    saveTimeline,
+    confirmDelete,
+    cancelDelete } from '../../dux/actions/timelines'
+import ConfirmDelete from '../ConfirmDelete/ConfirmDelete'
 
 class NavBar extends Component {
     static propTypes = {
-        match: PropTypes.array.isRequired
+        match: PropTypes.array.isRequired,
+        confirmDeleteFlag: PropTypes.bool.isRequired
     }
 
     constructor(props) {
         super(props)
 
+        this.doCancelDelete = this.doCancelDelete.bind(this)
+        this.doConfirmDelete = this.doConfirmDelete.bind(this)
+        this.doDelete = this.doDelete.bind(this)
         this.doSave = this.doSave.bind(this)
     }
 
+    doCancelDelete() {
+        this.props.dispatch(cancelDelete())
+    }
+
+    doConfirmDelete(e) {
+        this.props.dispatch(confirmDelete())
+    }
+
     doDelete(e) {
-        console.write('yeppers')
+        this.props.dispatch(deleteTimeline(this.endSegment()))
     }
 
     doSave(e) {
@@ -28,10 +45,11 @@ class NavBar extends Component {
         if (this.props.match.length === 3 && this.leadSegment() !== 'edit') {
             return null
         } else {
+            let sty = { cursor: 'pointer' }
             return (
                 <span>
                     <span> | </span>
-                    <Link to={`/delete/${this.endSegment()}`} onClick={this.doDelete}>Delete</Link>
+                    <a style={sty} onClick={this.doConfirmDelete}>Delete</a>
                 </span>
             )
         }
@@ -84,6 +102,14 @@ class NavBar extends Component {
         }
     }
 
+    showConfirmDeleteModal() {
+        if (this.props.confirmDeleteFlag) {
+            return (<ConfirmDelete doDelete={this.doDelete} cancelDelete={this.doCancelDelete} />)
+        } else {
+            return null
+        }
+    }
+
     view() {
         if (this.props.match.length === 3 && this.leadSegment() === 'view') {
             return null
@@ -101,6 +127,7 @@ class NavBar extends Component {
         if (this.props.match !== null && this.props.match.length === 3) {
             return (
                 <div>
+                    {this.showConfirmDeleteModal()}
                     <div className="banner actions">
                         {this.home()}
                         {this.view()}

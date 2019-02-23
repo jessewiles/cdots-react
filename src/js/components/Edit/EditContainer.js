@@ -8,7 +8,7 @@ import Edit from './Edit'
 
 const mapStateToProps = (state) => ({
     loading: state.timeline.loading,
-    name: /\/edit\/(.*)/.exec(state.router.location.pathname)[1],
+    path: state.router.location.pathname,
     timeline: state.timeline.data,
     dots: state.dots.dots
 })
