@@ -10,6 +10,10 @@ export const RECEIVE_TIMELINE = 'RECEIVE_TIMELINE'
 export const CONFIRM_DELETE = 'SHOW_CONFIRM_DELETE'
 export const CANCEL_DELETE = 'CANCEL_DELETE'
 
+export const CANCEL_ADD_TIMELINE = 'CANCEL_ADD_TIMELINE'
+export const DISPLAY_ADD_TIMELINE = 'DISPLAY_ADD_TIMELINE'
+export const HANDLE_ADD_TYPING = 'HANDLE_ADD_TYPING'
+
 const requestTimelines = () => ({
     type: REQUEST_TIMELINES
 })
@@ -41,6 +45,19 @@ export const confirmDelete = () => ({
 
 export const cancelDelete = () => ({
     type: CANCEL_DELETE
+})
+
+export const cancelAddTimeline = () => ({
+    type: CANCEL_ADD_TIMELINE
+})
+
+export const displayAddTimeline = () => ({
+    type: DISPLAY_ADD_TIMELINE
+})
+
+export const handleAddTimelineTyping = (data) => ({
+    type: HANDLE_ADD_TYPING,
+    data: data
 })
 
 export function fetchTimelines() {
@@ -86,5 +103,16 @@ export function deleteTimeline(name) {
         return fetch(`/api/timeline/${name}`, {
             method: 'delete'
         }).then(() => dispatch(push('/')))
+    }
+}
+
+export function addTimeline(name) {
+    return (dispatch, getState) => {
+        console.log('hackyj')
+        console.log(name)
+        return fetch('/api/add', {
+            method: 'post',
+            body: JSON.stringify({ name: name })
+        }).then(() => dispatch(cancelAddTimeline()))
     }
 }

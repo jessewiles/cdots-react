@@ -1,7 +1,10 @@
 import {
+    CANCEL_ADD_TIMELINE,
     CANCEL_DELETE,
     CONFIRM_DELETE,
     DELETING_TIMELINE,
+    DISPLAY_ADD_TIMELINE,
+    HANDLE_ADD_TYPING,
     REQUEST_TIMELINES,
     RECEIVE_TIMELINES,
     REQUEST_TIMELINE,
@@ -16,6 +19,7 @@ export const timelines = (state = { data: [], loading: true }, action) => {
             }
         case RECEIVE_TIMELINES:
             return {
+                ...state,
                 data: action.data,
                 loading: false,
                 lastUpdated: action.receivedAt
@@ -25,7 +29,14 @@ export const timelines = (state = { data: [], loading: true }, action) => {
     }
 }
 
-export const timeline = (state = { data: { dots: [] }, loading: true, confirmDelete: false }, action) => {
+export const timeline = (state = {
+    data: {
+        dots: []
+    },
+    loading: true,
+    confirmDelete: false,
+    displayAddTimeline: false,
+    addedTimelineName: '' }, action) => {
     switch (action.type) {
         case DELETING_TIMELINE:
             return {
@@ -40,6 +51,7 @@ export const timeline = (state = { data: { dots: [] }, loading: true, confirmDel
             }
         case RECEIVE_TIMELINE:
             return {
+                ...state,
                 data: action.data,
                 loading: false,
                 confirmDelete: false,
@@ -54,6 +66,25 @@ export const timeline = (state = { data: { dots: [] }, loading: true, confirmDel
             return {
                 ...state,
                 confirmDelete: true
+            }
+
+        case CANCEL_ADD_TIMELINE:
+            return {
+                ...state,
+                displayAddTimeline: false,
+                addedTimelineName: ''
+            }
+
+        case DISPLAY_ADD_TIMELINE:
+            return {
+                ...state,
+                displayAddTimeline: true
+            }
+
+        case HANDLE_ADD_TYPING:
+            return {
+                ...state,
+                addedTimelineName: action.data
             }
         default:
             return state
