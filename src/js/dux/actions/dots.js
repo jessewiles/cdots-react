@@ -19,5 +19,5 @@ export const updateDot = (dot) => ({
 
 export const hydrateDots = (dots) => ({
     type: HYDRATE_DOTS,
-    dots: dots
+    dots: dots || []
 })

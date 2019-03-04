@@ -20,6 +20,7 @@ const ConfirmDelete = (props) => (
 )
 
 ConfirmDelete.propTypes = {
+    cancelDelete: PropTypes.func.isRequired,
     doDelete: PropTypes.func.isRequired
 }
 

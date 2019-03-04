@@ -2,43 +2,70 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-import {
-    deleteTimeline,
-    saveTimeline,
-    confirmDelete,
-    cancelDelete } from '../../dux/actions/timelines'
 import ConfirmDelete from '../ConfirmDelete/ConfirmDelete'
+import AddTimeline from '../AddTimeline/AddTimeline'
 
 class NavBar extends Component {
     static propTypes = {
         match: PropTypes.array.isRequired,
-        confirmDeleteFlag: PropTypes.bool.isRequired
+        confirmDeleteFlag: PropTypes.bool.isRequired,
+        displayAddTimelineFlag: PropTypes.bool.isRequired,
+        addedTimelineName: PropTypes.string.isRequired
     }
 
     constructor(props) {
         super(props)
 
+        this.doAddModal = this.doAddModal.bind(this)
+        this.doAddTimeline = this.doAddTimeline.bind(this)
         this.doCancelDelete = this.doCancelDelete.bind(this)
+        this.doCancelAdd = this.doCancelAdd.bind(this)
         this.doConfirmDelete = this.doConfirmDelete.bind(this)
         this.doDelete = this.doDelete.bind(this)
         this.doSave = this.doSave.bind(this)
+        this.handleAddTimelineTyping = this.handleAddTimelineTyping.bind(this)
     }
 
-    doCancelDelete() {
-        this.props.dispatch(cancelDelete())
+    add() {
+        let sty = { cursor: 'pointer' }
+        let sep = null
+        if (this.props.match.length === 3) {
+            sep = (<span> | </span>)
+        }
+        return (
+            <span>
+                {sep}
+                <a style={sty} onClick={this.doAddModal}>Add</a>
+            </span>
+        )
+    }
+
+    doAddModal(e) {
+        this.props.displayAddTimeline()
+    }
+
+    doAddTimeline(e) {
+        this.props.addTimeline(this.props.addedTimelineName)
+    }
+
+    doCancelAdd(e) {
+        this.props.cancelAddTimeline()
+    }
+
+    doCancelDelete(e) {
+        this.props.cancelDelete()
     }
 
     doConfirmDelete(e) {
-        this.props.dispatch(confirmDelete())
+        this.props.confirmDelete()
     }
 
     doDelete(e) {
-        this.props.dispatch(deleteTimeline(this.endSegment()))
+        this.props.deleteTimeline(this.endSegment())
     }
 
     doSave(e) {
-        const { dispatch } = this.props
-        dispatch(saveTimeline(this.endSegment()))
+        this.props.saveTimeline(this.endSegment())
     }
 
     del() {
@@ -72,6 +99,9 @@ class NavBar extends Component {
         return (this.props.match.length === 3) ? this.props.match[2] : ''
     }
 
+    handleAddTimelineTyping(e) {
+        this.props.handleAddTimelineTyping(e.target.value)
+    }
 
     home() {
         if (this.props.match[0] === "/") {
@@ -102,6 +132,19 @@ class NavBar extends Component {
         }
     }
 
+    showAddTimelineModal() {
+        if (this.props.displayAddTimelineFlag) {
+            return (<AddTimeline
+                addedTimelineName={this.props.addedTimelineName}
+                doAdd={this.doAddTimeline}
+                cancelAdd={this.doCancelAdd}
+                handleAddTimelineTyping={this.handleAddTimelineTyping}
+            />)
+        } else {
+            return null
+        }
+    }
+
     showConfirmDeleteModal() {
         if (this.props.confirmDeleteFlag) {
             return (<ConfirmDelete doDelete={this.doDelete} cancelDelete={this.doCancelDelete} />)
@@ -128,8 +171,10 @@ class NavBar extends Component {
             return (
                 <div>
                     {this.showConfirmDeleteModal()}
+                    {this.showAddTimelineModal()}
                     <div className="banner actions">
                         {this.home()}
+                        {this.add()}
                         {this.view()}
                         {this.edit()}
                         {this.save()}
@@ -137,7 +182,16 @@ class NavBar extends Component {
                     </div>
                 </div>
             )
-        } else { return null }
+        } else {
+            return (
+                <div>
+                    {this.showAddTimelineModal()}
+                    <div className="banner actions">
+                        {this.add()}
+                    </div>
+                </div>
+            )
+        }
     }
 }
 
