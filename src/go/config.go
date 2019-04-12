@@ -7,10 +7,6 @@ import (
 type configuration struct {
 	TemplateDirectory string
 	StaticDirectory   string
-	MongoHost         string
-	MongoPort         string
-	MongoUser         string
-	MongoPassword     string
 }
 
 var Config configuration

@@ -57,10 +57,10 @@ func (m *MongoDB) SetSession() (err error) {
 		log.Printf("%v", err)
 		m.Session, err = mgo.Dial(config.uri)
 		if err != nil {
-			return err
+			return
 		}
 	}
-	return err
+	return
 }
 
 func MiddleDB(m *MongoDB) gin.HandlerFunc {
