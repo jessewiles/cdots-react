@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -149,11 +150,14 @@ func deleteTimeline(c *gin.Context) {
 	c.JSON(200, nil)
 }
 
-func SetupRouter() *gin.Engine {
+func SetupRouter() (router *gin.Engine, err error) {
 	m := mongo.MongoDB{}
-	m.SetDefault()
+	err = m.SetDefault()
+	if err != nil {
+		return
+	}
 
-	router := gin.Default()
+	router = gin.Default()
 	router.LoadHTMLGlob(Config.TemplateDirectory)
 	router.Use(gin.Recovery())
 	router.Use(mongo.MiddleDB(&m))
@@ -165,10 +169,16 @@ func SetupRouter() *gin.Engine {
 	router.GET("/api/timeline/:name", getTimeline)
 	router.POST("/api/timeline/:name", saveTimeline)
 	router.DELETE("/api/timeline/:name", deleteTimeline)
-	return router
+	return
 }
 
 func main() {
-	router := SetupRouter()
-	router.Run()
+	router, err := SetupRouter()
+	if err != nil {
+		log.Println("Caught exceptions initializeing server. Quitting...")
+		log.Printf("%v\n", err)
+		return
+	} else {
+		router.Run()
+	}
 }
