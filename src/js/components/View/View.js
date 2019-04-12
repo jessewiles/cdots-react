@@ -12,7 +12,7 @@ class View extends Component {
     }
 
     componentDidMount() {
-        const { fetchTimeline, name } = this.props
+        const { fetchTimeline, fetchStacks, name } = this.props
         fetchTimeline(name)
     }
 
@@ -23,6 +23,7 @@ class View extends Component {
             return (
                 <div>
                     <Timeline dots={this.props.timeline.dots} name={this.props.name} />
+                    <StackList stackables={this.props.stackables} name={this.props.name} />
                 </div>
             )
         }

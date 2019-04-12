@@ -11,6 +11,6 @@ const mapStateToProps = (state) => ({
     timeline: state.timeline.data
 })
 
-const mapDispatchToProps = { fetchTimeline }
+const mapDispatchToProps = { fetchTimeline, fetchStacks }
 
 export default connect(mapStateToProps, mapDispatchToProps)(View)
