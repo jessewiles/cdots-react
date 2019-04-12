@@ -7,8 +7,7 @@ COPY ./src/go/templates /cdots/templates
 
 ENV CDOTS_TMPL_DIR=/cdots/templates/*
 ENV CDOTS_STATIC_DIR=/cdots/public
-ENV CDOTS_MONGO_HOST=mdb-mongodb.cdots.svc
-ENV CDOTS_MONGO_PORT=27017
+ENV CDOTS_MONGO_URI=mongodb://mdb-mongodb.cdots.svc:27017/cdots
 
 LABEL "co.elastic.logs/fileset.stdout"="access"
 LABEL "co.elastic.logs/fileset.stderr"="error"

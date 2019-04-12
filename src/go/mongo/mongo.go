@@ -1,7 +1,6 @@
 package mongo
 
 import (
-	"fmt"
 	"log"
 	"time"
 
@@ -9,6 +8,8 @@ import (
 	mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
+
+const Database = "cdots"
 
 type Data struct {
 	Id   bson.ObjectId `form:"id" bson:"_id,omitempty"`
@@ -36,41 +37,30 @@ type TimelineKey struct {
 }
 
 type MongoDB struct {
-	Host             string
-	Port             string
-	Addrs            string
-	Database         string
-	EventTTLAfterEnd time.Duration
-	StdEventTTL      time.Duration
-	Info             *mgo.DialInfo
-	Session          *mgo.Session
+	Info    *mgo.DialInfo
+	Session *mgo.Session
 }
 
-func (m *MongoDB) SetDefault() {
-	m.Host = config.host
-	m.Addrs = fmt.Sprintf("%s:%s", config.host, config.port)
-	m.Database = "cdots"
-	m.EventTTLAfterEnd = 1 * time.Second
-	m.StdEventTTL = 20 * time.Minute
-	m.Info = &mgo.DialInfo{
-		Addrs:    []string{m.Addrs},
-		Timeout:  30 * time.Second,
-		Database: "cdots",
-		Username: config.user,
-		Password: config.password,
+func (m *MongoDB) SetDefault() (err error) {
+	m.Info, err = mgo.ParseURL(config.uri)
+	if err != nil {
+		log.Printf("%v", err)
 	}
+	m.Info.Username = config.user
+	m.Info.Password = config.password
+	return
 }
 
 func (m *MongoDB) SetSession() (err error) {
 	m.Session, err = mgo.DialWithInfo(m.Info)
 	if err != nil {
 		log.Printf("%v", err)
-		m.Session, err = mgo.Dial(m.Host)
+		m.Session, err = mgo.Dial(config.uri)
 		if err != nil {
-			return err
+			return
 		}
 	}
-	return err
+	return
 }
 
 func MiddleDB(m *MongoDB) gin.HandlerFunc {
@@ -92,7 +82,7 @@ func (m *MongoDB) GetData() (dates []Data, err error) {
 	session := m.Session.Clone()
 	defer session.Close()
 
-	err = session.DB(m.Database).C("Data").Find(bson.M{}).All(&dates)
+	err = session.DB(Database).C("Data").Find(bson.M{}).All(&dates)
 	return dates, err
 }
 
@@ -100,7 +90,7 @@ func (m *MongoDB) PostData(data *Data) (err error) {
 	session := m.Session.Clone()
 	defer session.Close()
 
-	err = session.DB(m.Database).C("Data").Insert(&data)
+	err = session.DB(Database).C("Data").Insert(&data)
 	return err
 }
 
@@ -108,7 +98,7 @@ func (m *MongoDB) GetTimelines() (tl []Timeline, err error) {
 	session := m.Session.Clone()
 	defer session.Close()
 
-	err = session.DB(m.Database).C("timelines").Find(bson.M{}).All(&tl)
+	err = session.DB(Database).C("timelines").Find(bson.M{}).All(&tl)
 	return tl, err
 }
 
@@ -116,7 +106,7 @@ func (m *MongoDB) GetTimeline(name string) (tl Timeline, err error) {
 	session := m.Session.Clone()
 	defer session.Close()
 
-	err = session.DB(m.Database).C("timelines").Find(bson.M{"name": name}).One(&tl)
+	err = session.DB(Database).C("timelines").Find(bson.M{"name": name}).One(&tl)
 	return tl, err
 }
 
@@ -124,7 +114,7 @@ func (m *MongoDB) NewTimeline(tl *Timeline) (err error) {
 	session := m.Session.Clone()
 	defer session.Close()
 
-	err = session.DB(m.Database).C("timelines").Insert(
+	err = session.DB(Database).C("timelines").Insert(
 		bson.M{
 			"name": tl.Name,
 			"dots": []bson.M{},
@@ -148,7 +138,7 @@ func (m *MongoDB) SaveTimeline(name string, tl *Timeline) (err error) {
 		}
 		dots = append(dots, d)
 	}
-	err = session.DB(m.Database).C("timelines").Update(
+	err = session.DB(Database).C("timelines").Update(
 		bson.M{"name": name},
 		bson.M{
 			"$set": bson.M{
@@ -164,14 +154,14 @@ func (m *MongoDB) DeleteTimeline(name string) (err error) {
 	session := m.Session.Clone()
 	defer session.Close()
 
-	err = session.DB(m.Database).C("timelines").Remove(bson.M{"name": name})
+	err = session.DB(Database).C("timelines").Remove(bson.M{"name": name})
 	return
 }
 
 func (m *MongoDB) NewTimelineKey(tlk *TimelineKey) (err error) {
 	session := m.Session.Clone()
 	defer session.Close()
-	err = session.DB(m.Database).C("timelineKeys").Insert(
+	err = session.DB(Database).C("timelineKeys").Insert(
 		bson.M{
 			"key": tlk.Key,
 		})

@@ -3,8 +3,7 @@ package mongo
 import "os"
 
 type configuration struct {
-	host     string
-	port     string
+	uri      string
 	user     string
 	password string
 }
@@ -14,11 +13,8 @@ var config configuration
 func init() {
 	var exists bool
 	config = configuration{}
-	if config.host, exists = os.LookupEnv("CDOTS_MONGO_HOST"); !exists {
-		config.host = "localhost"
-	}
-	if config.port, exists = os.LookupEnv("CDOTS_MONGO_PORT"); !exists {
-		config.port = "27017"
+	if config.uri, exists = os.LookupEnv("CDOTS_MONGO_URI"); !exists {
+		config.uri = "mongodb://localhost:27017/cdots"
 	}
 	if config.user, exists = os.LookupEnv("CDOTS_MONGO_USER"); !exists {
 		config.user = "root"
