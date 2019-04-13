@@ -1,0 +1,40 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: cdots-lb
+spec:
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+  selector:
+    app: cdots
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cdots
+  labels:
+    app: cdots
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: cdots
+  template:
+    metadata:
+      labels:
+        app: cdots
+    spec:
+      imagePullSecrets:
+      - name: jwixel-docker-secret
+      containers:
+      - name: cdots
+        image: jessewiles/cdots:0.0.12
+        env:
+        - name: CDOTS_MONGO_URI
+          value: "mongodb://mongo-0.mongo,mongo-1.mongo,mongo-2.mongo:27017/cdots"
+        ports:
+        - containerPort: 8080
