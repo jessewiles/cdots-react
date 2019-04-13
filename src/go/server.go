@@ -6,13 +6,11 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"strconv"
 
 	//"github.com/gin-contrib/sessions"
 	//"github.com/gin-contrib/sessions/mongo"
 	"github.com/gin-gonic/gin"
 	"github.com/jessewiles/cdots/src/go/mongo"
-	uuid "github.com/satori/go.uuid"
 )
 
 func siteIndexHandler(c *gin.Context) {
