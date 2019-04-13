@@ -16,22 +16,9 @@ import (
 )
 
 func siteIndexHandler(c *gin.Context) {
+	log.Println("Received request for index page")
 	c.HTML(
 		http.StatusOK, "main.tmpl", gin.H{})
-}
-
-func registerHandler(c *gin.Context) {
-}
-
-func signinHandler(c *gin.Context) {
-}
-
-func uuidHandler(w http.ResponseWriter, r *http.Request) {
-	auuid := []byte(uuid.NewV4().String())
-	w.WriteHeader(http.StatusOK)
-	w.Header().Set("Content-Type", "text/plain")
-	w.Header().Set("Content-Length", strconv.Itoa(len(auuid)))
-	w.Write(auuid)
 }
 
 func getTimelines(c *gin.Context) { // {{{
