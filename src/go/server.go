@@ -164,6 +164,7 @@ func main() {
 		log.Printf("%v\n", err)
 		return
 	} else {
+		log.Println("Here we go...")
 		router.Run()
 	}
 }
