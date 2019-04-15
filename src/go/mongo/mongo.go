@@ -46,8 +46,10 @@ func (m *MongoDB) SetDefault() (err error) {
 	if err != nil {
 		log.Printf("%v", err)
 	}
-	m.Info.Username = config.user
-	m.Info.Password = config.password
+	if config.user != nil && config.password != nil {
+		m.Info.Username = config.user
+		m.Info.Password = config.password
+	}
 	return
 }
 
