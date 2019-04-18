@@ -49,13 +49,13 @@ type MongoDB struct {
 func (m *MongoDB) SetDefault() {
 	m.Host = config.host
 	m.Addrs = fmt.Sprintf("%s:%s", config.host, config.port)
-	m.Database = "cdots"
+	m.Database = "admin"
 	m.EventTTLAfterEnd = 1 * time.Second
 	m.StdEventTTL = 20 * time.Minute
 	m.Info = &mgo.DialInfo{
 		Addrs:    []string{m.Addrs},
 		Timeout:  30 * time.Second,
-		Database: "cdots",
+		Database: "admin",
 		Username: config.user,
 		Password: config.password,
 	}

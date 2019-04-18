@@ -7,7 +7,7 @@ spec:
   type: LoadBalancer
   ports:
   - name: http
-    port: 8080
+    port: 80
     targetPort: 8080
   selector:
     app: cdots
@@ -32,9 +32,15 @@ spec:
       - name: jwixel-docker-secret
       containers:
       - name: cdots
-        image: jessewiles/cdots:0.0.12
+        image: jessewiles/cdots:0.0.15-rc0
         env:
-        - name: CDOTS_MONGO_URI
-          value: "mongodb://mongo-0.mongo,mongo-1.mongo,mongo-2.mongo:27017/cdots"
+        - name: CDOTS_MONGO_HOST
+          value: "mongo-mongodb.mongo.svc.cluster.local"
+        - name: CDOTS_MONGO_PORT
+          value: "27017"
+        - name: CDOTS_MONGO_USER
+          value: "<REDACTED>"
+        - name: CDOTS_MONGO_PASSWORD
+          value: "<REDACTED>"
         ports:
         - containerPort: 8080
