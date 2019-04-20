@@ -12,7 +12,7 @@ const receiveStacks = (data) => ({
 
 export function fetchStacks(name) {
     return (dispatch, getState) => {
-        dispatch(requestTimelines())
+        dispatch(requestStacks())
         return window.fetch('/api/stacks/on/' + name)
             .then(response => response.json())
             .then(data => {

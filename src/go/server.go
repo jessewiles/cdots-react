@@ -47,6 +47,21 @@ func getTimelines(c *gin.Context) { // {{{
 	}
 } // }}}
 
+func getStacks(c *gin.Context) {
+	m, ok := c.Keys["mongo"].(*mongo.MongoDB)
+	if !ok {
+		c.JSON(400, gin.H{"message": "can't reach db", "body": nil})
+	}
+
+	name := c.Param("name")
+	stacks, err := m.GetStacks(name)
+	if err != nil {
+		c.JSON(400, gin.H{"message": "can't get stacks from database", "body": nil})
+	} else {
+		c.JSON(200, stacks)
+	}
+}
+
 func getTimeline(c *gin.Context) { // {{{
 	m, ok := c.Keys["mongo"].(*mongo.MongoDB)
 	if !ok {
@@ -161,6 +176,7 @@ func SetupRouter() (router *gin.Engine) {
 	router.Static("/static/", Config.StaticDirectory)
 	router.GET("/", siteIndexHandler)
 	router.POST("/api/add", newTimeline)
+	router.GET("/api/stacks/on/:name", getStacks)
 	router.GET("/api/timelines", getTimelines)
 	router.GET("/api/timeline/:name", getTimeline)
 	router.POST("/api/timeline/:name", saveTimeline)

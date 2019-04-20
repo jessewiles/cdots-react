@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Timeline from '../Timeline/Timeline'
+import StackList from '../StackList/StackList'
 
 class View extends Component {
     static propTypes = {
@@ -14,6 +15,7 @@ class View extends Component {
     componentDidMount() {
         const { fetchTimeline, fetchStacks, name } = this.props
         fetchTimeline(name)
+        fetchStacks(name)
     }
 
     render() {

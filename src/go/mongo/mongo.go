@@ -64,7 +64,7 @@ func (m *MongoDB) SetDefault() {
 func (m *MongoDB) SetSession() (err error) {
 	m.Session, err = mgo.DialWithInfo(m.Info)
 	if err != nil {
-		log.Printf("%v", err)
+		fmt.Printf("%v", err)
 		m.Session, err = mgo.Dial(m.Host)
 		if err != nil {
 			return err
@@ -110,6 +110,16 @@ func (m *MongoDB) GetTimelines() (tl []Timeline, err error) {
 
 	err = session.DB(m.Database).C("timelines").Find(bson.M{}).All(&tl)
 	return tl, err
+}
+
+func (m *MongoDB) GetStacks(name string) (st []Timeline, err error) {
+	session := m.Session.Clone()
+	defer session.Close()
+
+	log.Printf("hackj, %s", name)
+	err = session.DB(m.Database).C("timelines").Find(
+		bson.M{"name": bson.M{"$ne": name}}).All(&st)
+	return
 }
 
 func (m *MongoDB) GetTimeline(name string) (tl Timeline, err error) {
