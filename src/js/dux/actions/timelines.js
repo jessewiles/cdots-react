@@ -29,9 +29,10 @@ const requestTimeline = (name) => ({
     name: name
 })
 
-const receiveTimeline = (data) => ({
+const receiveTimeline = (data, path) => ({
     type: RECEIVE_TIMELINE,
     data: data,
+    name: path,
     receivedAt: Date.now()
 })
 
@@ -81,7 +82,7 @@ export function fetchTimeline(path) {
             .then(response => response.json())
             .then(data => {
                 dispatch(hydrateDots(data.dots))
-                dispatch(receiveTimeline(data))
+                dispatch(receiveTimeline(data, path))
             })
     }
 }

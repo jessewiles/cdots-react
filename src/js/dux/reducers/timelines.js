@@ -10,6 +10,8 @@ import {
     REQUEST_TIMELINE,
     RECEIVE_TIMELINE } from '../actions/timelines'
 
+const COLORS = ['pink', 'lightgreen', 'yellow', 'orange', 'blue', 'navy']
+
 export const timelines = (state = { data: [], loading: true }, action) => {
     switch (action.type) {
         case REQUEST_TIMELINES:
@@ -34,6 +36,7 @@ export const timeline = (state = {
         dots: []
     },
     loading: true,
+    asked: null,
     confirmDelete: false,
     displayAddTimeline: false,
     addedTimelineName: '' }, action) => {
@@ -50,10 +53,37 @@ export const timeline = (state = {
                 confirmDelete: false
             }
         case RECEIVE_TIMELINE:
+            let groups = []
+            if (Array.isArray(action.data)) {
+                let ndata = {
+                    id: 'a101001', // Fix this
+                    name: 'Perfetto', // TODO: fix this too
+                    dots: []}
+                let count = 0
+                action.data.map(item => {
+                    count += 1
+                    let gid = 'a'+count.toString()
+                    let ndots = []
+                    item.dots.map(dot => {
+                        let ndot = {...dot}
+                        ndot.header = dot.content
+                        ndot.group = gid
+                        ndata.dots.push(ndot)
+                    })
+                    groups.push({
+                        id: gid,
+                        content: item.name,
+                        style: 'background-color: ' + COLORS[count -1]
+                    })
+                })
+                action.data = ndata
+            }
             return {
                 ...state,
                 data: action.data,
+                groups: groups,
                 loading: false,
+                asked: action.name,
                 confirmDelete: false,
                 lastUpdated: action.receivedAt
             }

@@ -13,14 +13,14 @@ class StackList extends Component {
         if (!this.props.loading) {
             content = (
                 <div>
-                    <h4> Combine with another timeline </h4>
+                    <h5> Combine with another timeline </h5>
                     <ul>
                         {this.props.stacks.map((tline) => {
                             let aid = tline.id || `i${Math.random().toString().substring(10)}`
                             return (
                                 <li key={"lix" + aid}>
                                     <Link
-                                        to={"/stack/" + tline.name + "/on/" + this.props.path.replace('/view/', '')}
+                                        to={"/view/" + this.props.path.replace('/view/', '') + "/" + tline.name}
                                         key={tline.id}>
                                         {tline.name}
                                     </Link>

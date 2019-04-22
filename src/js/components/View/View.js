@@ -6,16 +6,27 @@ import StackList from '../StackList/StackList'
 class View extends Component {
     static propTypes = {
         loading: PropTypes.bool.isRequired,
-        name: PropTypes.string.isRequired,
         timeline: PropTypes.shape({
             dots: PropTypes.array
         })
     }
 
     componentDidMount() {
-        const { fetchTimeline, fetchStacks, name } = this.props
+        const { fetchTimeline, fetchStacks } = this.props
+        let name = this.props.match.params.name
         fetchTimeline(name)
         fetchStacks(name)
+    }
+
+    componentDidUpdate() {
+        let name = this.props.match.params.name
+        if (this.props.asked !== name) {
+            if (!this.props.loading) {
+                const { fetchTimeline, fetchStacks } = this.props
+                fetchTimeline(name)
+                fetchStacks(name)
+            }
+        }
     }
 
     render() {
@@ -24,7 +35,7 @@ class View extends Component {
         } else {
             return (
                 <div>
-                    <Timeline dots={this.props.timeline.dots} name={this.props.name} />
+                    <Timeline dots={this.props.timeline.dots} groups={this.props.groups} name={this.props.match.params.name} />
                     <StackList stackables={this.props.stackables} name={this.props.name} />
                 </div>
             )

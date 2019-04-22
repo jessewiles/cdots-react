@@ -25,6 +25,8 @@ type Timeline struct {
 type Dot struct {
 	ID      string     `json:"id"`
 	Content string     `json:"content"`
+	Header  string     `json:"header,omitempty"`
+	Group   string     `json:"group,omitempty"`
 	Start   *time.Time `json:"start"`
 	End     *time.Time `json:"end,omitempty"`
 }
@@ -88,22 +90,6 @@ func MiddleDB(m *MongoDB) gin.HandlerFunc {
 
 // ========== model
 
-func (m *MongoDB) GetData() (dates []Data, err error) {
-	session := m.Session.Clone()
-	defer session.Close()
-
-	err = session.DB(m.Database).C("Data").Find(bson.M{}).All(&dates)
-	return dates, err
-}
-
-func (m *MongoDB) PostData(data *Data) (err error) {
-	session := m.Session.Clone()
-	defer session.Close()
-
-	err = session.DB(m.Database).C("Data").Insert(&data)
-	return err
-}
-
 func (m *MongoDB) GetTimelines() (tl []Timeline, err error) {
 	session := m.Session.Clone()
 	defer session.Close()
@@ -116,7 +102,6 @@ func (m *MongoDB) GetStacks(name string) (st []Timeline, err error) {
 	session := m.Session.Clone()
 	defer session.Close()
 
-	log.Printf("hackj, %s", name)
 	err = session.DB(m.Database).C("timelines").Find(
 		bson.M{"name": bson.M{"$ne": name}}).All(&st)
 	return

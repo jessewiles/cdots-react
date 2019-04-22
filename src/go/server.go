@@ -4,14 +4,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
-	"strconv"
+	"strings"
 
 	//"github.com/gin-contrib/sessions"
 	//"github.com/gin-contrib/sessions/mongo"
 	"github.com/gin-gonic/gin"
 	"github.com/jessewiles/cdots/src/go/mongo"
-	uuid "github.com/satori/go.uuid"
 )
 
 func siteIndexHandler(c *gin.Context) {
@@ -23,14 +23,6 @@ func registerHandler(c *gin.Context) {
 }
 
 func signinHandler(c *gin.Context) {
-}
-
-func uuidHandler(w http.ResponseWriter, r *http.Request) {
-	auuid := []byte(uuid.NewV4().String())
-	w.WriteHeader(http.StatusOK)
-	w.Header().Set("Content-Type", "text/plain")
-	w.Header().Set("Content-Length", strconv.Itoa(len(auuid)))
-	w.Write(auuid)
 }
 
 func getTimelines(c *gin.Context) { // {{{
@@ -75,6 +67,40 @@ func getTimeline(c *gin.Context) { // {{{
 	} else {
 		c.JSON(200, tl)
 	}
+}
+
+func getStackedTimeline(c *gin.Context) {
+	m, ok := c.Keys["mongo"].(*mongo.MongoDB)
+	if !ok {
+		c.JSON(400, gin.H{"message": "can't reach db", "body": nil})
+	}
+
+	name := c.Param("name")
+	stacks := strings.Split(c.Param("stacks"), "/")
+	log.Println("stacks: %v", stacks)
+	var tls []mongo.Timeline
+	tl, err := m.GetTimeline(name)
+	if err != nil {
+		log.Printf("Error fetching timeline: %s", name)
+		c.JSON(400, gin.H{"message": "problem retrieving stacked tl from database", "body": nil})
+		return
+	} else {
+		tls = append(tls, tl)
+	}
+	for _, stack := range stacks {
+		if stack != "" {
+			tl, err = m.GetTimeline(stack)
+			if err != nil {
+				log.Printf("Error fetching stack: %s\n", stack)
+				c.JSON(400, gin.H{"message": "problem retrieving stacked tl from database", "body": nil})
+				return
+			} else {
+				tls = append(tls, tl)
+			}
+		}
+	}
+
+	c.JSON(200, tls)
 }
 
 func newTimeline(c *gin.Context) {
@@ -179,6 +205,7 @@ func SetupRouter() (router *gin.Engine) {
 	router.GET("/api/stacks/on/:name", getStacks)
 	router.GET("/api/timelines", getTimelines)
 	router.GET("/api/timeline/:name", getTimeline)
+	router.GET("/api/timeline/:name/*stacks", getStackedTimeline)
 	router.POST("/api/timeline/:name", saveTimeline)
 	router.DELETE("/api/timeline/:name", deleteTimeline)
 	return

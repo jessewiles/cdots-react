@@ -8,8 +8,9 @@ import View from './View'
 
 const mapStateToProps = (state) => ({
     loading: state.timeline.loading,
-    name: /\/view\/(.*)/.exec(state.router.location.pathname)[1],
-    timeline: state.timeline.data
+    timeline: state.timeline.data,
+    groups: state.timeline.groups,
+    asked: state.timeline.asked
 })
 
 const mapDispatchToProps = { fetchTimeline, fetchStacks }
