@@ -35,7 +35,10 @@ class View extends Component {
         } else {
             return (
                 <div>
-                    <Timeline dots={this.props.timeline.dots} groups={this.props.groups} name={this.props.match.params.name} />
+                    <Timeline
+                        dots={this.props.timeline.dots}
+                        groups={this.props.groups}
+                        name={this.props.match.params.name} />
                     <StackList stackables={this.props.stackables} name={this.props.name} />
                 </div>
             )

@@ -58,14 +58,12 @@ export const timeline = (state = {
                 let ndata = {
                     id: 'a101001', // Fix this
                     name: 'Perfetto', // TODO: fix this too
-                    dots: []}
+                    dots: [] }
                 let count = 0
                 action.data.map(item => {
-                    count += 1
-                    let gid = 'a'+count.toString()
-                    let ndots = []
+                    let gid = 'a' + count.toString()
                     item.dots.map(dot => {
-                        let ndot = {...dot}
+                        let ndot = { ...dot }
                         ndot.header = dot.content
                         ndot.group = gid
                         ndata.dots.push(ndot)
@@ -73,8 +71,9 @@ export const timeline = (state = {
                     groups.push({
                         id: gid,
                         content: item.name,
-                        style: 'background-color: ' + COLORS[count -1]
+                        style: 'background-color: ' + COLORS[count]
                     })
+                    count += 1
                 })
                 action.data = ndata
             }

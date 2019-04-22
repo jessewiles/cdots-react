@@ -77,7 +77,6 @@ func getStackedTimeline(c *gin.Context) {
 
 	name := c.Param("name")
 	stacks := strings.Split(c.Param("stacks"), "/")
-	log.Println("stacks: %v", stacks)
 	var tls []mongo.Timeline
 	tl, err := m.GetTimeline(name)
 	if err != nil {
