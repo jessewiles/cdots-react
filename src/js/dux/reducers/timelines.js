@@ -62,6 +62,7 @@ export const timeline = (state = {
                 let count = 0
                 action.data.map(item => {
                     let gid = 'a' + count.toString()
+                    item.dots = item.dots || []
                     item.dots.map(dot => {
                         let ndot = { ...dot }
                         ndot.header = dot.content

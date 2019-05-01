@@ -54,6 +54,30 @@ func getStacks(c *gin.Context) {
 	}
 }
 
+func getRemainingStacks(c *gin.Context) {
+	m, ok := c.Keys["mongo"].(*mongo.MongoDB)
+	if !ok {
+		c.JSON(400, gin.H{"message": "can't reach db", "body": nil})
+	}
+
+	// TODO: Write tidy fn to break these out
+	name := c.Param("name")
+	sp := c.Param("stacks")
+	stacks := strings.Split(sp[1:], "/")
+	var names []string
+	names = append(names, name)
+	for _, n := range stacks {
+		names = append(names, n)
+	}
+
+	tls, err := m.GetRemainingStacks(names)
+	if err != nil {
+		c.JSON(400, gin.H{"message": "can't get remaining stacks from database", "body": nil})
+	} else {
+		c.JSON(200, tls)
+	}
+}
+
 func getTimeline(c *gin.Context) { // {{{
 	m, ok := c.Keys["mongo"].(*mongo.MongoDB)
 	if !ok {
@@ -76,7 +100,8 @@ func getStackedTimeline(c *gin.Context) {
 	}
 
 	name := c.Param("name")
-	stacks := strings.Split(c.Param("stacks"), "/")
+	sp := c.Param("stacks")
+	stacks := strings.Split(sp[1:], "/")
 	var tls []mongo.Timeline
 	tl, err := m.GetTimeline(name)
 	if err != nil {
@@ -87,15 +112,12 @@ func getStackedTimeline(c *gin.Context) {
 		tls = append(tls, tl)
 	}
 	for _, stack := range stacks {
-		if stack != "" {
-			tl, err = m.GetTimeline(stack)
-			if err != nil {
-				log.Printf("Error fetching stack: %s\n", stack)
-				c.JSON(400, gin.H{"message": "problem retrieving stacked tl from database", "body": nil})
-				return
-			} else {
-				tls = append(tls, tl)
-			}
+		tl, err = m.GetTimeline(stack)
+		if err != nil {
+			c.JSON(400, gin.H{"message": "problem retrieving stacked tl from database", "body": nil})
+			return
+		} else {
+			tls = append(tls, tl)
 		}
 	}
 
@@ -202,6 +224,7 @@ func SetupRouter() (router *gin.Engine) {
 	router.GET("/", siteIndexHandler)
 	router.POST("/api/add", newTimeline)
 	router.GET("/api/stacks/on/:name", getStacks)
+	router.GET("/api/stacks/on/:name/*stacks", getRemainingStacks)
 	router.GET("/api/timelines", getTimelines)
 	router.GET("/api/timeline/:name", getTimeline)
 	router.GET("/api/timeline/:name/*stacks", getStackedTimeline)
