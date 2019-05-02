@@ -55,7 +55,7 @@ describe('<Timeline />', () => {
             )
         }
         global.fetch = mockFetch(timelines[0]) // eslint-disable-line no-undef
-        wrapper = shallow(<Timeline name="omega" dots={timelines[0].dots} />)
+        wrapper = shallow(<Timeline name="omega" dots={timelines[0].dots} groups=""/>)
         expect(wrapper.find('div').first().html()).toContain('<h2> omega </h2>')
     })
 })

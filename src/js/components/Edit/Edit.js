@@ -26,7 +26,11 @@ class Edit extends Component {
         } else {
             return (
                 <div>
-                    <Timeline name={this.name()} dots={this.props.dots}/>
+                    <Timeline
+                        name={this.name()}
+                        dots={this.props.dots}
+                        groups={this.props.groups}
+                    />
                     <DotPanel
                         dots={this.props.dots}
                         addDot={this.props.addDot}
