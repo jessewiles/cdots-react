@@ -10,7 +10,9 @@ const mapStateToProps = (state) => ({
     loading: state.timeline.loading,
     path: state.router.location.pathname,
     timeline: state.timeline.data,
-    dots: state.dots.dots
+    groups: state.timeline.groups,
+    dots: state.dots.dots,
+    asked: state.timeline.asked
 })
 
 const mapDispatchToProps = {

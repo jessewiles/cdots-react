@@ -33,7 +33,7 @@ export const timelines = (state = { data: [], loading: true }, action) => {
 
 export const timeline = (state = {
     data: {
-        dots: []
+        dots: [], groups: []
     },
     loading: true,
     asked: null,

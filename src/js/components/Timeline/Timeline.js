@@ -7,12 +7,13 @@ const vis = require('vis')
 class Timeline extends Component {
     static propTypes = {
         name: PropTypes.string.isRequired,
-        dots: PropTypes.array.isRequired
+        dots: PropTypes.array,
+        groups: PropTypes.array
     }
 
     componentDidMount() {
         let t = ReactDOM.findDOMNode(this)
-        if (this.props.groups.length > 0) {
+        if (this.props.groups && this.props.groups.length > 0) {
             let v = new vis.Timeline(t, new vis.DataSet(this.props.dots), new vis.DataSet(this.props.groups), {}) // eslint-disable-line no-unused-vars
         } else {
             let v = new vis.Timeline(t, new vis.DataSet(this.props.dots), {}) // eslint-disable-line no-unused-vars
