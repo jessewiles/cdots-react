@@ -9,6 +9,8 @@ type configuration struct {
 	password string
 }
 
+const CDOTS_DB = "cdots"
+
 var config configuration
 
 func init() {

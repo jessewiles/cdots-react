@@ -25,6 +25,8 @@ type Timeline struct {
 type Dot struct {
 	ID      string     `json:"id"`
 	Content string     `json:"content"`
+	Header  string     `json:"header,omitempty"`
+	Group   string     `json:"group,omitempty"`
 	Start   *time.Time `json:"start"`
 	End     *time.Time `json:"end,omitempty"`
 }
@@ -64,7 +66,7 @@ func (m *MongoDB) SetDefault() {
 func (m *MongoDB) SetSession() (err error) {
 	m.Session, err = mgo.DialWithInfo(m.Info)
 	if err != nil {
-		log.Printf("%v", err)
+		fmt.Printf("%v", err)
 		m.Session, err = mgo.Dial(m.Host)
 		if err != nil {
 			return err
@@ -88,35 +90,43 @@ func MiddleDB(m *MongoDB) gin.HandlerFunc {
 
 // ========== model
 
-func (m *MongoDB) GetData() (dates []Data, err error) {
-	session := m.Session.Clone()
-	defer session.Close()
-
-	err = session.DB(m.Database).C("Data").Find(bson.M{}).All(&dates)
-	return dates, err
-}
-
-func (m *MongoDB) PostData(data *Data) (err error) {
-	session := m.Session.Clone()
-	defer session.Close()
-
-	err = session.DB(m.Database).C("Data").Insert(&data)
-	return err
-}
-
 func (m *MongoDB) GetTimelines() (tl []Timeline, err error) {
 	session := m.Session.Clone()
 	defer session.Close()
 
-	err = session.DB(m.Database).C("timelines").Find(bson.M{}).All(&tl)
+	err = session.DB(CDOTS_DB).C("timelines").Find(bson.M{}).All(&tl)
 	return tl, err
+}
+
+func (m *MongoDB) GetStacks(name string) (st []Timeline, err error) {
+	session := m.Session.Clone()
+	defer session.Close()
+
+	err = session.DB(CDOTS_DB).C("timelines").Find(
+		bson.M{"name": bson.M{"$ne": name}}).All(&st)
+	return
+}
+
+func (m *MongoDB) GetRemainingStacks(names []string) (st []Timeline, err error) {
+	session := m.Session.Clone()
+	defer session.Close()
+
+	var nots []bson.M
+	for _, name := range names {
+		nots = append(nots, bson.M{"name": bson.M{"$ne": name}})
+	}
+
+	err = session.DB(CDOTS_DB).C("timelines").Find(
+		bson.M{"$and": nots}).All(&st)
+
+	return
 }
 
 func (m *MongoDB) GetTimeline(name string) (tl Timeline, err error) {
 	session := m.Session.Clone()
 	defer session.Close()
 
-	err = session.DB(m.Database).C("timelines").Find(bson.M{"name": name}).One(&tl)
+	err = session.DB(CDOTS_DB).C("timelines").Find(bson.M{"name": name}).One(&tl)
 	return tl, err
 }
 
@@ -124,7 +134,7 @@ func (m *MongoDB) NewTimeline(tl *Timeline) (err error) {
 	session := m.Session.Clone()
 	defer session.Close()
 
-	err = session.DB(m.Database).C("timelines").Insert(
+	err = session.DB(CDOTS_DB).C("timelines").Insert(
 		bson.M{
 			"name": tl.Name,
 			"dots": []bson.M{},
@@ -148,7 +158,7 @@ func (m *MongoDB) SaveTimeline(name string, tl *Timeline) (err error) {
 		}
 		dots = append(dots, d)
 	}
-	err = session.DB(m.Database).C("timelines").Update(
+	err = session.DB(CDOTS_DB).C("timelines").Update(
 		bson.M{"name": name},
 		bson.M{
 			"$set": bson.M{
@@ -164,14 +174,14 @@ func (m *MongoDB) DeleteTimeline(name string) (err error) {
 	session := m.Session.Clone()
 	defer session.Close()
 
-	err = session.DB(m.Database).C("timelines").Remove(bson.M{"name": name})
+	err = session.DB(CDOTS_DB).C("timelines").Remove(bson.M{"name": name})
 	return
 }
 
 func (m *MongoDB) NewTimelineKey(tlk *TimelineKey) (err error) {
 	session := m.Session.Clone()
 	defer session.Close()
-	err = session.DB(m.Database).C("timelineKeys").Insert(
+	err = session.DB(CDOTS_DB).C("timelineKeys").Insert(
 		bson.M{
 			"key": tlk.Key,
 		})

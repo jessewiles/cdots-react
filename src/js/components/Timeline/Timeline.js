@@ -12,13 +12,16 @@ class Timeline extends Component {
 
     componentDidMount() {
         let t = ReactDOM.findDOMNode(this)
-        let v = new vis.Timeline(t, new vis.DataSet(this.props.dots), {}) // eslint-disable-line no-unused-vars
+        if (this.props.groups.length > 0) {
+            let v = new vis.Timeline(t, new vis.DataSet(this.props.dots), new vis.DataSet(this.props.groups), {}) // eslint-disable-line no-unused-vars
+        } else {
+            let v = new vis.Timeline(t, new vis.DataSet(this.props.dots), {}) // eslint-disable-line no-unused-vars
+        }
     }
 
     render() {
         return (
             <div>
-                <h2> {this.props.name} </h2>
                 <div className="timeline" />
             </div>
         )

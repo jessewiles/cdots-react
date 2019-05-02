@@ -5,7 +5,6 @@ debug.log
 
 bin/
 
-
 # Ignore changes to this from here on out
 Dockerrun.aws.json
 

@@ -11,7 +11,7 @@ const routes = (
         <NavBar />
         <Switch>
             <Route exact path="/" component={HomeContainer} />
-            <Route path="/view/:name" component={ViewContainer} />
+            <Route path="/view/:name*" component={ViewContainer} />
             <Route path="/edit/:name" component={EditContainer} />
             <Route component={NoMatch} />
         </Switch>
